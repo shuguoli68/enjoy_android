@@ -23,8 +23,10 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  json_serializable: ^3.2.3 #https://github.com/dart-lang/json_serializable
-  bot_toast: ^2.1.1 #https://github.com/MMMzq/bot_toast
+  json_serializable: ^3.2.3 # https://github.com/dart-lang/json_serializable
+  bot_toast: ^2.1.1 # https://github.com/MMMzq/bot_toast
+  dio: ^3.0.7 # https://github.com/flutterchina/dio
+  shared_preferences: ^0.5.4+6 # https://pub.dev/packages/shared_preferences#-readme-tab-
 
 dev_dependencies:
   flutter_test:
