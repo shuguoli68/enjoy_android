@@ -1,31 +1,15 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+class MyMain extends StatefulWidget {
+//  MyHomePage({Key key, this.title}) : super(key: key);
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
+//  final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyMainState createState() => _MyMainState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyMainState extends State<MyMain> {
   int _counter = 0;
 
   void _incrementCounter() {
@@ -51,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text('APP'),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
