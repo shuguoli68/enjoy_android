@@ -50,11 +50,11 @@ class LoginEntity {
 class LoginData {
 	String password;
 	String publicName;
-	List<Null> chapterTops;
+	List<String> chapterTops;
 	String icon;
 	String nickname;
 	bool admin;
-	List<Null> collectIds;
+	List<int> collectIds;
 	int id;
 	int type;
 	String email;
@@ -67,13 +67,13 @@ class LoginData {
 		password = json['password'];
 		publicName = json['publicName'];
 		if (json['chapterTops'] != null) {
-			chapterTops = new List<Null>();
+			chapterTops = new List<String>();
 		}
 		icon = json['icon'];
 		nickname = json['nickname'];
 		admin = json['admin'];
 		if (json['collectIds'] != null) {
-			collectIds = new List<Null>();
+			collectIds = new List<int>();
 		}
 		id = json['id'];
 		type = json['type'];

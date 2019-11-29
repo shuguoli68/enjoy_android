@@ -6,8 +6,28 @@ myToast(String s){
   BotToast.showText(text: s);
 }
 
-mySp() async {
-  return await SharedPreferences.getInstance();
+spSetStr(String key, String value) async {
+  SharedPreferences sp = await SharedPreferences.getInstance();
+  sp.setString(key, value);
+}
+
+spGetStr(String key) async {
+  SharedPreferences sp = await SharedPreferences.getInstance();
+  String a = sp.getString(key);
+  if(a==null) return "";
+  return a;
+}
+
+spSetBool(String key, bool value) async {
+  SharedPreferences sp = await SharedPreferences.getInstance();
+  sp.setBool(key, value);
+}
+
+Future<bool> spGetBool(String key) async {
+  SharedPreferences sp = await SharedPreferences.getInstance();
+  bool a = sp.getBool(key);
+  if(a == null) return false;
+  return a;
 }
 
 goTo(BuildContext context, Widget key){

@@ -4,6 +4,7 @@ import 'package:enjoy_android/global/common.dart';
 import 'package:enjoy_android/global/sp_key.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bot_toast/bot_toast.dart';
 
 import '../../main.dart';
 import 'login.dart';
@@ -14,19 +15,23 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Splash(),
+    return BotToastInit(
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        debugShowCheckedModeBanner: false,
+        home: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Splash(),
+            ),
           ),
         ),
+        navigatorObservers: [BotToastNavigatorObserver()],
       ),
     );
   }
@@ -43,16 +48,17 @@ class _SplashState extends State<Splash> {
   Timer timer;
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     timer = Timer(const Duration(milliseconds: 1500),(){
-      SharedPreferences sp = mySp();
-      var isLogin = sp.getBool(SPKey.IS_LOGIN);
-      if(isLogin){
-        goToRm(context, MyMain());
-      }else{
-        goToRm(context, Login());
-      }
+      Future isLogin = spGetBool(SPKey.IS_LOGIN);
+      isLogin.then((onValue){
+        if(onValue){
+          goToRm(context, MyMain());
+        }else{
+          goToRm(context, Login());
+        }
+      });
     });
   }
 

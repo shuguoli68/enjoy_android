@@ -1,84 +1,138 @@
-
-//import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:enjoy_android/global/api.dart';
-var httpUtil = HttpUtil(
-    baseUrl:Api.baseUrl,
-    header:headers
-);
-var httpUtilJson = HttpUtil(
-    baseUrl:Api.baseUrl,
-    header:headersJson
-);
 
-//普通格式的header
-Map<String, dynamic> headers = {
-  "Accept":"application/json",
-//  "Content-Type":"application/x-www-form-urlencoded",
-};
-//json格式的header
-Map<String, dynamic> headersJson = {
-  "Accept":"application/json",
-  "Content-Type":"application/json; charset=UTF-8",
-};
-class HttpUtil {
-  Dio dio;
-  BaseOptions options;
+/*
+ * 封装 restful 请求
+ *
+ * GET、POST、DELETE、PATCH
+ * 主要作用为统一处理相关事务：
+ *  - 统一处理请求前缀；
+ *  - 统一打印请求信息；
+ *  - 统一打印响应信息；
+ *  - 统一打印报错信息；
+ */
+class HttpUtils {
 
-  HttpUtil({String baseUrl= Api.baseUrl,Map<String, dynamic> header}) {
-    print('dio赋值');
-    // 或者通过传递一个 `options`来创建dio实例
-    options = BaseOptions(
-      // 请求基地址，一般为域名，可以包含路径
-      baseUrl: baseUrl,
-      //连接服务器超时时间，单位是毫秒.
-      connectTimeout: 10000,
-      //[如果返回数据是json(content-type)，dio默认会自动将数据转为json，无需再手动转](https://github.com/flutterchina/dio/issues/30)
-      responseType:ResponseType.plain,
-      ///  响应流上前后两次接受到数据的间隔，单位为毫秒。如果两次间隔超过[receiveTimeout]，
-      ///  [Dio] 将会抛出一个[DioErrorType.RECEIVE_TIMEOUT]的异常.
-      ///  注意: 这并不是接收数据的总时限.
-      receiveTimeout: 3000,
-      headers: header,
-    );
-    dio = new Dio(options);
-//    dio.interceptors.add(CookieManager(CookieJar()));
-  }
+  /// global dio object
+  static Dio dio;
 
-  get(url, {data, options, cancelToken}) async {
-    print('get请求启动! url：$url ,body: $data');
-    Response response;
-    try {
-      response = await dio.get(
-        url,
-        cancelToken: cancelToken,
-      );
-      print('get请求成功!response.data：${response.data}');
-    } on DioError catch (e) {
-      if (CancelToken.isCancel(e)) {
-        print('get请求取消! ' + e.message);
+  /// default options
+  static const int CONNECT_TIMEOUT = 10000;
+  static const int RECEIVE_TIMEOUT = 3000;
+
+  /// http request methods
+  static const String GET = 'get';
+  static const String POST = 'post';
+  static const String PUT = 'put';
+  static const String PATCH = 'patch';
+  static const String DELETE = 'delete';
+
+  /// request method
+  static Future<Map> request (
+      String url,
+      { data, method }) async {
+
+    data = data ?? {};
+    method = method ?? 'GET';
+
+    /// restful 请求处理
+    /// /gysw/search/hist/:user_id        user_id=27
+    /// 最终生成 url 为     /gysw/search/hist/27
+    data.forEach((key, value) {
+      if (url.indexOf(key) != -1) {
+        url = url.replaceAll(':$key', value.toString());
       }
-      print('get请求发生错误：$e');
+    });
+
+    /// 打印请求相关信息：请求地址、请求方式、请求参数
+    print('请求地址：【' + method + '  ' + url + '】');
+    print('请求参数：' + data.toString());
+
+    Dio dio = createInstance();
+    var result;
+
+    try {
+      Response response = await dio.request(url, data: data, options: new Options(method: method));
+
+      result = response.data;
+
+      /// 打印响应相关信息
+      print('响应数据：' + response.toString());
+    } on DioError catch (e) {
+      /// 打印请求失败相关信息
+      print('请求出错：' + e.toString());
     }
-    return response.data;
+
+    return result;
   }
 
-  post(url, {data, options, cancelToken}) async {
-    print('post请求启动! url：$url ,body: $data');
-    Response response;
-    try {
-      response = await dio.post(
-        url,
-        data: data,
+  /// 创建 dio 实例对象
+  static Dio createInstance () {
+    if (dio == null) {
+      /// 全局属性：请求前缀、连接超时时间、响应超时时间
+      BaseOptions options = new BaseOptions(
+        baseUrl: Api.baseUrl,
+        connectTimeout: CONNECT_TIMEOUT,
+        receiveTimeout: RECEIVE_TIMEOUT,
       );
-      print('post请求成功!response.data：${response.data}');
-    } on DioError catch (e) {
-      if (CancelToken.isCancel(e)) {
-        print('post请求取消! ' + e.message);
-      }
-      print('post请求发生错误：$e');
+
+      dio = new Dio(options);
     }
-    return response.data;
+
+    return dio;
   }
+
+  /// 清空 dio 对象
+  static clear () {
+    dio = null;
+  }
+
 }
 
+
+// GET 请求
+// 返回的结果直接就是 json 格式
+// 要使用 await，必须在方法名后面加上 async
+_handleGetShelf () async {
+  var result = await HttpUtils.request(
+      '/gysw/shelf',
+      method: HttpUtils.GET,
+      data: {
+        'id': 1,
+      }
+  );
+}
+
+
+// POST 请求
+_handleAddShelf () async {
+  var result = await HttpUtils.request(
+      '/gysw/shelf',
+      method: HttpUtils.POST,
+      data: {
+        'id': 1,
+      }
+  );
+}
+
+// PUT 请求
+_handleEditShelf () async{
+  var result = await HttpUtils.request(
+      '/gysw/shelf/:id',
+      method: HttpUtils.PUT,
+      data: {
+        'id': 1,
+      }
+  );
+}
+
+// DELETE 请求
+_handleDelShelf () async {
+  var result = await HttpUtils.request(
+      '/gysw/shelf/:id',
+      method: HttpUtils.DELETE,
+      data: {
+        'id': 1,
+      }
+  );
+}
