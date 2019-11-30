@@ -1,77 +1,87 @@
+
+
+import 'dart:async';
+
+import 'package:enjoy_android/global/common.dart';
+import 'package:enjoy_android/global/sp_key.dart';
+import 'package:enjoy_android/widget/main/home.dart';
+import 'package:enjoy_android/widget/sub/login.dart';
 import 'package:flutter/material.dart';
+import 'package:bot_toast/bot_toast.dart';
 
-class MyMain extends StatefulWidget {
-//  MyHomePage({Key key, this.title}) : super(key: key);
 
-//  final String title;
+void main() => runApp(MyApp());
 
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
   @override
-  _MyMainState createState() => _MyMainState();
+  Widget build(BuildContext context) {
+    return BotToastInit(
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        debugShowCheckedModeBanner: false,
+        home: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Splash(),
+            ),
+          ),
+        ),
+        navigatorObservers: [BotToastNavigatorObserver()],
+      ),
+    );
+  }
 }
 
-class _MyMainState extends State<MyMain> {
-  int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+class Splash extends StatefulWidget {
+  @override
+  State<Splash> createState() => _SplashState();
+}
+
+class _SplashState extends State<Splash> {
+
+  Timer timer;
+
+  @override
+  void initState(){
+    super.initState();
+    timer = Timer(const Duration(milliseconds: 1500),(){
+      Future isLogin = spGetBool(SPKey.IS_LOGIN);
+      isLogin.then((onValue){
+        if(onValue){
+          goToRm(context, Home());
+        }else{
+//          goToRm(context, Login());
+          goToRm(context, Home());
+        }
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text('APP'),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
+//      appBar: AppBar(
+//        title: Text('Splash'),
+//      ),
+      body: Scaffold(
+        body: Center(
+          child: Image.asset('images/splash.png',fit: BoxFit.fill,),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
+    timer = null;
   }
 }
