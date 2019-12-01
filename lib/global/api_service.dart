@@ -45,7 +45,24 @@ class ApiService{
   static Future<Map> banner()async{
     var req = {
     };
-    return base(Api.banner, req);
+    return base(Api.banner, req, type: HttpUtils.GET);
   }
 
+  /**
+   * 首页文章列表
+   */
+  static Future<Map> homeArticle(int page)async{
+    var req = {
+    };
+    return base(Api.article+'$page/json', req, type: HttpUtils.GET);
+  }
+
+  /**
+   * 体系数据
+   */
+  static Future<Map> systemTree()async{
+    var req = {
+    };
+    return base(Api.systemTree, req, type: HttpUtils.GET);
+  }
 }

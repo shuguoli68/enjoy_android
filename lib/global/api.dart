@@ -23,4 +23,16 @@ class Api {
    * 方法：GET, 参数：无
    */
   static const String banner = '/banner/json';
+
+  /**
+   * 首页文章列表:/article/list/0/json
+   * 方法：GET, 参数：页码，拼接在连接中，从0开始。
+   */
+  static const String article = '/article/list/';
+
+  /**
+   * 体系数据:/tree/json
+   * 方法：GET, 参数：无
+   */
+  static const String systemTree = '/tree/json';
 }
