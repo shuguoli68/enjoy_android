@@ -3,6 +3,7 @@ import 'package:enjoy_android/entity/home_article_entity.dart';
 import 'package:enjoy_android/entity/home_banner_entity.dart';
 import 'package:enjoy_android/entity/login_entity.dart';
 import 'package:enjoy_android/entity/register_entity.dart';
+import 'package:enjoy_android/entity/system_sub_entity.dart';
 import 'package:enjoy_android/entity/system_tree_entity.dart';
 
 class EntityFactory {
@@ -19,6 +20,8 @@ class EntityFactory {
       return LoginEntity.fromJson(json) as T;
     } else if (T.toString() == "RegisterEntity") {
       return RegisterEntity.fromJson(json) as T;
+    } else if (T.toString() == "SystemSubEntity") {
+      return SystemSubEntity.fromJson(json) as T;
     } else if (T.toString() == "SystemTreeEntity") {
       return SystemTreeEntity.fromJson(json) as T;
     } else {
