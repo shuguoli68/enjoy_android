@@ -8,7 +8,7 @@ import 'package:enjoy_android/global/api_service.dart';
 import 'package:enjoy_android/global/common.dart';
 import 'package:enjoy_android/widget/web_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_refresh_loadmore/flutter_refresh_loadmore.dart';
+import 'package:zeking_refresh/zeking_refresh.dart';
 
 import '../../entity_factory.dart';
 
@@ -20,32 +20,49 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  ZekingRefreshController _refreshController;
   List<HomeBannerData> bannerData = new List();
   List<HomeArticleDataData> datas = new List();
-  GlobalKey<ListViewRefreshLoadMoreWidgetState> _listViewKey = new GlobalKey();
   bool hasMoreData = true;
   int page = 0;
 
   @override
   void initState() {
     super.initState();
-    _banner();
-    _article(true);
+    _refreshController = ZekingRefreshController();
+    _refreshController.refreshingWithLoadingView();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Flex(
-        direction: Axis.vertical,
-//        child: Column(
-          children: <Widget>[
-            _bannerWidget(),
-            Expanded(flex:1, child: _articleWidget(),)
-          ],
-//        ),
-      )
-    );
+    return Flex(direction:Axis.vertical, children: <Widget>[
+      _bannerWidget(),
+      Expanded(
+        flex:1,
+        child: ZekingRefresh(
+          controller: _refreshController,
+          onRefresh: onRefresh,
+          onLoading: onLoading,
+          child: ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.all(2),
+            itemBuilder: (BuildContext context, int index) {
+              return _articleWidget(index);
+            },
+            itemCount: datas.length,
+          ),
+        ),
+      ),
+    ],);
+  }
+
+  onRefresh() {
+    _banner();
+    _article(true);
+  }
+
+  onLoading() {
+    _article(false);
   }
 
   _banner(){
@@ -71,16 +88,31 @@ class _HomePageState extends State<HomePage> {
     ApiService.homeArticle(page).then((json){
       HomeArticleEntity entity = EntityFactory.generateOBJ(json);
       if(entity.errorCode == 0){//成功
-        datas.addAll(entity.data.datas);
-        _listViewKey.currentState.changeData(datas.length,hasMoreData: hasMoreData);
-        ++page;
-//        setState(() {
-//
-//        });
+        List<HomeArticleDataData> mData = entity.data.datas;
+        setState(() {
+          datas.addAll(mData);
+          ++page;
+        });
+        if(isRefresh){
+          if(mData.isNotEmpty)
+            _refreshController.refreshSuccess();
+          else
+            _refreshController.refreshEmpty();
+        }else{
+          if(mData.isNotEmpty)
+            _refreshController.loadMoreSuccess();
+          else
+            _refreshController.loadMoreNoMore();
+        }
       }else{//失败
         BotToast.showText(text: entity.errorMsg);
+        if(isRefresh){
+          _refreshController.refreshFaild();
+        }else{
+          _refreshController.loadMoreFailed();
+        }
       }
-      return null;
+      return ;
     });
   }
 
@@ -111,63 +143,40 @@ class _HomePageState extends State<HomePage> {
       ),);
   }
 
-  Widget _articleWidget() {
-    return ListViewRefreshLoadMoreWidget(
-      key: _listViewKey,
-      //listview  count
-      itemCount: datas.length,
-
-      //listview 的item widget
-      swrapInsideWidget: (buildContex, index) {
-        HomeArticleDataData item = datas[index];
-        return GestureDetector(
-          onTap: (){
-            goTo(context, WebWidget(url: item.link,title: item.chapterName,));
-          },
-          child: Padding(padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),child: Container(
-            padding: EdgeInsets.all(5.0),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black12, width: 2),
-              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            ),
-            child: Column(
-              children: <Widget>[
-                Flex(direction: Axis.horizontal,children: <Widget>[
-                  ClipOval(
-                    child: Image.asset('images/default.png',width: 50,height: 50,fit: BoxFit.fitHeight,),
-                  ),
-                  Expanded(flex:1, child: Padding(padding: EdgeInsets.only(left: 5),child: Text(item.title, style: TextStyle(fontSize: 16),maxLines: 3,),),)
-                ],),
-                Padding(padding: EdgeInsets.all(3)),
-                Flex(direction: Axis.horizontal,children: <Widget>[
-                  Expanded(flex:1, child: Text(item.chapterName,style: TextStyle(color: Colors.black54),)),
-                  Expanded(flex:1, child: Text(item.niceShareDate,style: TextStyle(color: Colors.black54),)),
-                ],)
-              ],
-            ),
-          ),),
-        );
+  Widget _articleWidget(int index) {
+    HomeArticleDataData item = datas[index];
+    return GestureDetector(
+      onTap: (){
+        goTo(context, WebWidget(url: item.link,title: item.chapterName,));
       },
-      //下拉刷新
-      refrshCallback: () async {
-        _article(true);
-      },
-      //加载更多
-      loadMoreCallback: () async {
-        _article(false);
-      },
-
-      /// 加载更多 用
-      hasMoreData: hasMoreData,
-      //    ///footer widget 非必须传有默认
-      //    footerWidget: (statusStr){
-      //      return null;
-      //    },
-      //    //head widget 非必传有默认
-//          headWidget: (headstate,currentHeight){
-//          return _bannerWidget();
-//          ;
-//          },
+      child: Padding(padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),child: Container(
+        padding: EdgeInsets.all(5.0),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black12, width: 2),
+          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        ),
+        child: Column(
+          children: <Widget>[
+            Flex(direction: Axis.horizontal,children: <Widget>[
+              ClipOval(
+                child: Image.asset('images/default.png',width: 50,height: 50,fit: BoxFit.fitHeight,),
+              ),
+              Expanded(flex:1, child: Padding(padding: EdgeInsets.only(left: 5),child: Text(item.title, style: TextStyle(fontSize: 16),maxLines: 3,),),)
+            ],),
+            Padding(padding: EdgeInsets.all(3)),
+            Flex(direction: Axis.horizontal,children: <Widget>[
+              Expanded(flex:1, child: Text(item.chapterName,style: TextStyle(color: Colors.black54),)),
+              Expanded(flex:1, child: Text(item.niceShareDate,style: TextStyle(color: Colors.black54),)),
+            ],)
+          ],
+        ),
+      ),),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _refreshController.dispose();
   }
 }

@@ -3,10 +3,9 @@ import 'package:enjoy_android/entity/system_tree_entity.dart';
 import 'package:enjoy_android/global/api_service.dart';
 import 'package:enjoy_android/widget/sub/system_sub.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_refresh_loadmore/flutter_refresh_loadmore.dart';
 import 'package:enjoy_android/global/common.dart';
+import 'package:zeking_refresh/zeking_refresh.dart';
 import '../../entity_factory.dart';
-import '../web_widget.dart';
 
 
 class SystemPage extends StatefulWidget {
@@ -17,18 +16,39 @@ class SystemPage extends StatefulWidget {
 class _SystemPageState extends State<SystemPage> {
 
   List<SystemTreeData> datas = new List();
-  GlobalKey<ListViewRefreshLoadMoreWidgetState> _listViewKey = new GlobalKey();
-  bool hasMoreData = false;
+  ZekingRefreshController _refreshController;
 
   @override
   void initState() {
     super.initState();
-    _systemTree(true);
+    _refreshController = ZekingRefreshController();
+    _refreshController.refreshingWithLoadingView();
   }
 
   @override
   Widget build(BuildContext context) {
-    return _systemTreeWidget();
+    return ZekingRefresh(
+      controller: _refreshController,
+      onRefresh: onRefresh,
+      onLoading: onLoading,
+      canLoadMore: false,
+      child: ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.all(2),
+        itemBuilder: (BuildContext context, int index) {
+          return _systemTreeWidget(index);
+        },
+        itemCount: datas.length,
+      ),
+    );
+  }
+
+  onRefresh() {
+    _systemTree(true);
+  }
+
+  onLoading() {
+    _systemTree(false);
   }
 
   _systemTree(bool isRefresh){
@@ -38,70 +58,65 @@ class _SystemPageState extends State<SystemPage> {
     ApiService.systemTree().then((json){
       SystemTreeEntity entity = EntityFactory.generateOBJ(json);
       if(entity.errorCode == 0){//成功
-        datas.addAll(entity.data);
-        _listViewKey.currentState.changeData(datas.length,hasMoreData: hasMoreData);
+        List<SystemTreeData> mData = entity.data;
+        setState(() {
+          datas.addAll(mData);
+        });
+        if(isRefresh){
+          if(mData.isNotEmpty)
+            _refreshController.refreshSuccess();
+          else
+            _refreshController.refreshEmpty();
+        }else{
+          if(mData.isNotEmpty)
+            _refreshController.loadMoreSuccess();
+          else
+            _refreshController.loadMoreNoMore();
+        }
       }else{//失败
         BotToast.showText(text: entity.errorMsg);
+        if(isRefresh){
+          _refreshController.refreshFaild();
+        }else{
+          _refreshController.loadMoreFailed();
+        }
       }
-      return null;
+      return ;
     });
   }
 
-  Widget _systemTreeWidget() {
-    return ListViewRefreshLoadMoreWidget(
-      key: _listViewKey,
-      //listview  count
-      itemCount: datas.length,
-
-      //listview 的item widget
-      swrapInsideWidget: (buildContex, index) {
-        SystemTreeData item = datas[index];
-        StringBuffer sub = StringBuffer('');
-        item.children.forEach((child){
-          sub.write(child.name);
-          sub.write('    ');
-        });
-        return GestureDetector(
-          onTap: (){
-            goTo(context, SystemSub(data: item.children,));
-          },
-          child: Padding(padding: EdgeInsets.all(5),child: Container(
-            padding: EdgeInsets.all(5.0),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black12, width: 2),
-              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            ),
-            child: Center(
-              child: Column(
-                children: <Widget>[
-                  Padding(padding: EdgeInsets.all(5), child: Text(item.name,style: TextStyle(fontSize: 18),),),
-                  Padding(padding: EdgeInsets.all(5), child: Text(sub.toString()),),
-                ],
-              ),
-            ),
-          ),),
-        );
+  Widget _systemTreeWidget(int index) {
+    SystemTreeData item = datas[index];
+    StringBuffer sub = StringBuffer('');
+    item.children.forEach((child){
+      sub.write(child.name);
+      sub.write('    ');
+    });
+    return GestureDetector(
+      onTap: (){
+        goTo(context, SystemSub(data: item.children,));
       },
-      //下拉刷新
-      refrshCallback: () async {
-        _systemTree(true);
-      },
-      //加载更多
-      loadMoreCallback: () async {
-        _systemTree(false);
-      },
-
-      /// 加载更多 用
-      hasMoreData: hasMoreData,
-      //    ///footer widget 非必须传有默认
-      //    footerWidget: (statusStr){
-      //      return null;
-      //    },
-      //    //head widget 非必传有默认
-//          headWidget: (headstate,currentHeight){
-//          return _bannerWidget();
-//          ;
-//          },
+      child: Padding(padding: EdgeInsets.all(5),child: Container(
+        padding: EdgeInsets.all(5.0),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black12, width: 2),
+          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        ),
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              Padding(padding: EdgeInsets.all(5), child: Text(item.name,style: TextStyle(fontSize: 18),),),
+              Padding(padding: EdgeInsets.all(5), child: Text(sub.toString()),),
+            ],
+          ),
+        ),
+      ),),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _refreshController.dispose();
   }
 }
