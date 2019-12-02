@@ -85,4 +85,24 @@ class ApiService{
     };
     return base(Api.navigate, req);
   }
+
+  ///
+  /// 项目分类
+  ///
+  static Future<Map> projectTree()async{
+    var req = {
+
+    };
+    return base(Api.projectTree, req);
+  }
+
+  ///
+  /// 项目列表
+  ///
+  static Future<Map> projectSub(int page, int cid)async{
+    var req = {
+      'cid':cid
+    };
+    return base(Api.projectSub+'$page/json', req);
+  }
 }

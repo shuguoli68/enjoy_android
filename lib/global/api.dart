@@ -47,4 +47,16 @@ class Api {
   ///方法：GET, 参数：无。
   ///
   static const String navigate = '/navi/json';
+
+  ///
+  ///项目分类:https://www.wanandroid.com/project/tree/json
+  ///方法：GET, 参数：无。
+  ///
+  static const String projectTree = '/project/tree/json';
+
+  ///
+  ///项目列表:https://www.wanandroid.com/project/list/1/json?cid=294
+  ///方法：GET, 参数：cid 分类的id，上面项目分类接口; 页码：拼接在链接中，从1开始。
+  ///
+  static const String projectSub = '/project/list/';
 }
