@@ -41,4 +41,10 @@ class Api {
   ///方法：GET, 参数：cid 分类的id，上述二级目录的id; 页码：拼接在链接上，从0开始。
   ///
   static const String systemSub = '/article/list/';
+
+  ///
+  ///导航数据:https://www.wanandroid.com/navi/json
+  ///方法：GET, 参数：无。
+  ///
+  static const String navigate = '/navi/json';
 }

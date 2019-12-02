@@ -6,6 +6,8 @@ import 'package:enjoy_android/entity/register_entity.dart';
 import 'package:enjoy_android/entity/system_sub_entity.dart';
 import 'package:enjoy_android/entity/system_tree_entity.dart';
 
+import 'entity/navigate_entity.dart';
+
 class EntityFactory {
   static T generateOBJ<T>(json) {
     if (1 == 0) {
@@ -24,7 +26,9 @@ class EntityFactory {
       return SystemSubEntity.fromJson(json) as T;
     } else if (T.toString() == "SystemTreeEntity") {
       return SystemTreeEntity.fromJson(json) as T;
-    } else {
+    } else if (T.toString() == "NavigateEntity") {
+      return NavigateEntity.fromJson(json) as T;
+    }else {
       return null;
     }
   }

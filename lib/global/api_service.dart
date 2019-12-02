@@ -75,4 +75,14 @@ class ApiService{
     };
     return base(Api.systemSub+'$page/json', req);
   }
+
+  ///
+  /// 导航数据
+  ///
+  static Future<Map> navigate()async{
+    var req = {
+
+    };
+    return base(Api.navigate, req);
+  }
 }
