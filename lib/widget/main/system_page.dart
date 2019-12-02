@@ -1,6 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:enjoy_android/entity/system_tree_entity.dart';
 import 'package:enjoy_android/global/api_service.dart';
+import 'package:enjoy_android/widget/sub/system_sub.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_refresh_loadmore/flutter_refresh_loadmore.dart';
 import 'package:enjoy_android/global/common.dart';
@@ -62,7 +63,7 @@ class _SystemPageState extends State<SystemPage> {
         });
         return GestureDetector(
           onTap: (){
-//            goTo(context, WebWidget(url: item.link,title: item.chapterName,));
+            goTo(context, SystemSub(data: item.children,));
           },
           child: Padding(padding: EdgeInsets.all(5),child: Container(
             padding: EdgeInsets.all(5.0),
