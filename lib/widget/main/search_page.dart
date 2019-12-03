@@ -60,15 +60,21 @@ class _SearchPageState extends State<SearchPage> {
           return Column(
             children: <Widget>[
               Container(
+                width: double.maxFinite,
                 padding: EdgeInsets.all(5),
                 margin: EdgeInsets.only(top: 30),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black12, width: 2),
                   borderRadius: const BorderRadius.all(Radius.circular(5.0)),
                 ),
-                child: Text(data[index].name),
+                child: Text(data[index].name,textAlign: TextAlign.left,),
               ),
-              ListView.builder(
+              Wrap(
+                spacing: 5,
+                runSpacing: 5,
+                children: childChilden(index),
+              ),
+              /*ListView.builder(
                 shrinkWrap: true, //解决无限高度问题
                 physics:NeverScrollableScrollPhysics(),//禁用滑动事件
                 padding: EdgeInsets.all(10),
@@ -89,7 +95,7 @@ class _SearchPageState extends State<SearchPage> {
                   );
                 },
                 itemCount: data[index].articles.length,
-              ),
+              ),*/
             ],
           );
         },
@@ -97,6 +103,23 @@ class _SearchPageState extends State<SearchPage> {
       ),
     );
   }
+
+
+  List<Widget> childChilden(int index) => List.generate(data[index].articles.length, (subIndex) {
+    return GestureDetector(
+      onTap: (){
+        goTo(context, WebWidget(url: data[index].articles[subIndex].link, title: data[index].articles[subIndex].title,));
+      },
+      child: Chip(
+        label: Text(data[index].articles[subIndex].title),
+        avatar: CircleAvatar(
+          backgroundColor: Color(0xfff1f1f1),
+          child: Text(data[index].articles[subIndex].title.substring(0,1).isEmpty?"C":data[index].articles[subIndex].title.substring(0,1),style: TextStyle(fontSize: 12.0),),
+        ),
+      ),
+    );
+  });
+
 
   void onLoading() {
   }
