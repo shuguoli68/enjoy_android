@@ -15,7 +15,7 @@ class ProjectPage extends StatefulWidget {
   State<ProjectPage> createState() => _ProjectPageState();
 }
 
-class _ProjectPageState extends State<ProjectPage> with SingleTickerProviderStateMixin{
+class _ProjectPageState extends State<ProjectPage> with /*TickerProviderStateMixin*/SingleTickerProviderStateMixin{
   TabController _controller;//tab控制器
   int _currentIndex = 0; //选中下标
 

@@ -35,25 +35,26 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Flex(direction:Axis.vertical, children: <Widget>[
-      _bannerWidget(),
-      Expanded(
-        flex:1,
-        child: ZekingRefresh(
-          controller: _refreshController,
-          onRefresh: onRefresh,
-          onLoading: onLoading,
-          child: ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.all(2),
-            itemBuilder: (BuildContext context, int index) {
-              return _articleWidget(index);
-            },
-            itemCount: datas.length,
-          ),
-        ),
+    return ZekingRefresh(
+      controller: _refreshController,
+      onRefresh: onRefresh,
+      onLoading: onLoading,
+      child: ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.all(2),
+        itemBuilder: (BuildContext context, int index) {
+          if(index == 0){
+            return Column(children: <Widget>[
+              _bannerWidget(),
+              _articleWidget(index),
+            ],);
+          }else {
+            return _articleWidget(index);
+          }
+        },
+        itemCount: datas.length,
       ),
-    ],);
+    );
   }
 
   onRefresh() {
