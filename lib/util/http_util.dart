@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:enjoy_android/global/api.dart';
 
+import 'log_util.dart';
+
 /*
  * 封装 restful 请求
  *
@@ -12,6 +14,10 @@ import 'package:enjoy_android/global/api.dart';
  *  - 统一打印报错信息；
  */
 class HttpUtils {
+
+  HttpUtils(){
+    LogUtil.init(isDebug: true, title: 'projectPage',);
+  }
 
   /// global dio object
   static Dio dio;
@@ -45,8 +51,8 @@ class HttpUtils {
     });
 
     /// 打印请求相关信息：请求地址、请求方式、请求参数
-    print('请求地址：【' + method + '  ' + url + '】');
-    print('请求参数：' + data.toString());
+    LogUtil.d('请求地址：【' + method + '  ' + url + '】');
+    LogUtil.d('请求参数：' + data.toString());
 
     Dio dio = createInstance();
     var result;
@@ -57,10 +63,10 @@ class HttpUtils {
       result = response.data;
 
       /// 打印响应相关信息
-      print('响应数据：' + response.toString());
+      LogUtil.d('响应数据：' + response.toString());
     } on DioError catch (e) {
       /// 打印请求失败相关信息
-      print('请求出错：' + e.toString());
+      LogUtil.d('请求出错：' + e.toString());
     }
 
     return result;

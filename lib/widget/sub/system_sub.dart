@@ -4,7 +4,6 @@ import 'package:enjoy_android/entity/system_tree_entity.dart';
 import 'package:enjoy_android/global/api_service.dart';
 import 'package:enjoy_android/global/common.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_refresh_loadmore/flutter_refresh_loadmore.dart';
 import 'package:zeking_refresh/zeking_refresh.dart';
 
 import '../../entity_factory.dart';

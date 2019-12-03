@@ -19,10 +19,9 @@ class _ProjectPageState extends State<ProjectPage> with SingleTickerProviderStat
   TabController _controller;//tab控制器
   int _currentIndex = 0; //选中下标
 
-  List<ProData> _datas = new List() ;//tab集合
-  List<DataX> _listDatas = new List();//内容集合
+  List<ProData> _datas = new List<ProData>() ;//tab集合
+  List<DataX> _listDatas = new List<DataX>();//内容集合
   ZekingRefreshController _refreshController;
-  bool hasMoreData = false;
   int page = 0;
 
   @override
@@ -30,10 +29,8 @@ class _ProjectPageState extends State<ProjectPage> with SingleTickerProviderStat
     super.initState();
     print('initState');
     //初始化controller并添加监听
-    _controller = TabController(length: _datas.length, vsync: this);
-    _controller.addListener(() => _onTabChanged());
     _refreshController = ZekingRefreshController();
-    _refreshController.refreshingWithLoadingView();
+    onRefresh();
   }
 
   ///
@@ -54,62 +51,63 @@ class _ProjectPageState extends State<ProjectPage> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('知识体系'),),
       body: new DefaultTabController(
-        length: _datas.length,
-        child: new Scaffold(
-          appBar: new TabBar(
-            controller: _controller,//控制器
-            labelColor: Colors.black, //选中的颜色
-            labelStyle: TextStyle(fontSize: 16), //选中的样式
-            unselectedLabelColor: Colors.black54, //未选中的颜色
-            unselectedLabelStyle: TextStyle(fontSize: 14), //未选中的样式
-            indicatorColor: Colors.green, //下划线颜色
-            isScrollable: true, //是否可滑动
-            tabs: _datas.map((ProData choice) {
-              return new Tab(
-                text: choice.name,
-              );
-            }).toList(),
-            //点击事件
-            onTap: (int i) {
-              print(i);
-            },
-          ),
-          body: new TabBarView(
-            controller: _controller,
-            children: _datas.map((ProData item) {
-              return ZekingRefresh(
-                controller: _refreshController,
-                onRefresh: onRefresh,
-                onLoading: onLoading,
-                child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.all(2),
-                  itemBuilder: (BuildContext context, int index) {
-                    return _systemSubWidget(index);
-                  },
-                  itemCount: _listDatas.length,
-                ),
-              );
-            }).toList(),
-          ),
+      length: _datas.length,
+      child: new Scaffold(
+        appBar: new TabBar(
+          controller: _controller,//控制器
+          labelColor: Colors.black, //选中的颜色
+          labelStyle: TextStyle(fontSize: 16), //选中的样式
+          unselectedLabelColor: Colors.black54, //未选中的颜色
+          unselectedLabelStyle: TextStyle(fontSize: 14), //未选中的样式
+          indicatorColor: Colors.green, //下划线颜色
+          isScrollable: true, //是否可滑动
+          tabs: _datas.map((ProData choice) {
+            return new Tab(
+              text: choice.name,
+            );
+          }).toList(),
+          //点击事件
+          onTap: (int i) {
+            print(i);
+          },
+        ),
+        body: new TabBarView(
+          controller: _controller,
+          children: _datas.map((ProData item) {
+            return ZekingRefresh(
+              controller: _refreshController,
+              onRefresh: onRefresh,
+              onLoading: onLoading,
+              child: ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.all(2),
+                itemBuilder: (BuildContext context, int index) {
+                  return _systemSubWidget(index);
+                },
+                itemCount: _listDatas.length,
+              ),
+            );
+          }).toList(),
         ),
       ),
+    ),
     );
   }
 
   onRefresh() {
     _datas.clear();
-    _listDatas.clear();
     ApiService.projectTree().then((json){
       ProjectTabEntity entity = EntityFactory.generateOBJ(json);
       if(entity.errorCode == 0){//成功
         setState(() {
           _datas.addAll(entity.mData);
+          _controller = TabController(initialIndex:0, length: _datas.length, vsync: this);
+          _controller.addListener(() => _onTabChanged());
         });
         _projectSub(true, _datas[_currentIndex].id);
       }else{//失败
+        BotToast.showText(text: entity.errorMsg);
       }
       return null;
     });
