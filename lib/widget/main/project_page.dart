@@ -54,7 +54,9 @@ class _ProjectPageState extends State<ProjectPage> with /*TickerProviderStateMix
       body: new DefaultTabController(
       length: _datas.length,
       child: new Scaffold(
-        appBar: new TabBar(
+        appBar: _datas.isEmpty
+            ?Text('加载中...')
+            :new TabBar(
           controller: _controller,//控制器
           labelColor: Colors.black, //选中的颜色
           labelStyle: TextStyle(fontSize: 16), //选中的样式
@@ -72,7 +74,9 @@ class _ProjectPageState extends State<ProjectPage> with /*TickerProviderStateMix
             print(i);
           },
         ),
-        body: new TabBarView(
+        body: _datas.isEmpty
+            ?Text('正在加载数据...')
+            :new TabBarView(
           controller: _controller,
           children: _datas.map((ProData item) {
             return ZekingRefresh(
