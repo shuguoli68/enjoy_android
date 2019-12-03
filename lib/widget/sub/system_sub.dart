@@ -59,6 +59,7 @@ class _SystemSubState extends State<SystemSub> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('知识体系'),),
+      backgroundColor: Colors.grey,
       body: new DefaultTabController(
         length: _datas.length,
         child: new Scaffold(
@@ -151,10 +152,11 @@ class _SystemSubState extends State<SystemSub> with SingleTickerProviderStateMix
       onTap: (){
         goTo(context, WebWidget(url: item.link,title: item.chapterName,));
       },
-      child: Padding(padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),child: Container(
+      child: Padding(padding: EdgeInsets.only(left: 5, right: 5, bottom: 15),child: Container(
         padding: EdgeInsets.all(5.0),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.black12, width: 1),
+          color: Colors.white,
+//          border: Border.all(color: Colors.black12, width: 1),
           borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         ),
         child: Column(
@@ -167,8 +169,8 @@ class _SystemSubState extends State<SystemSub> with SingleTickerProviderStateMix
             ],),
             Padding(padding: EdgeInsets.all(3)),
             Flex(direction: Axis.horizontal,children: <Widget>[
-              Expanded(flex:1, child: Text(item.chapterName,style: TextStyle(color: Colors.black54),)),
-              Expanded(flex:1, child: Text(item.niceShareDate,style: TextStyle(color: Colors.black54),)),
+              Expanded(flex:1, child: Text(item.author.isEmpty?'分享自：'+item.shareUser:item.author,style: TextStyle(color: Colors.black54),)),
+              Expanded(flex:1, child: Text(item.niceShareDate=='未知时间'?item.niceDate:item.niceShareDate,style: TextStyle(color: Colors.black54),)),
             ],)
           ],
         ),
