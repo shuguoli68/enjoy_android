@@ -23,15 +23,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         debugShowCheckedModeBanner: false,
-        home: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Splash(),
-            ),
-          ),
-        ),
+        home: Splash(),
         navigatorObservers: [BotToastNavigatorObserver()],
       ),
     );

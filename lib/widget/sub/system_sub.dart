@@ -104,6 +104,8 @@ class _SystemSubState extends State<SystemSub> with SingleTickerProviderStateMix
   }
 
   onRefresh() {
+    page = 0;
+    _listDatas.clear();
     _systemSub(true, _datas[_currentIndex].id);
   }
 
@@ -112,9 +114,6 @@ class _SystemSubState extends State<SystemSub> with SingleTickerProviderStateMix
   }
 
   _systemSub(bool isRefresh, int id){
-    if(isRefresh) {
-      _listDatas.clear();
-    }
     ApiService.systemSub(page, id).then((json){
       SystemSubEntity entity = EntityFactory.generateOBJ(json);
       if(entity.errorCode == 0){//成功

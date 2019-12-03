@@ -71,9 +71,8 @@ class ApiService{
   ///
   static Future<Map> systemSub(int page, int cid)async{
     var req = {
-      'cid' : cid
     };
-    return base(Api.systemSub+'$page/json', req);
+    return base(Api.systemSub+'$page/json?cid=$cid', req);
   }
 
   ///
@@ -101,8 +100,8 @@ class ApiService{
   ///
   static Future<Map> projectSub(int page, int cid)async{
     var req = {
-      'cid':cid
+
     };
-    return base(Api.projectSub+'$page/json', req);
+    return base(Api.projectSub+'$page/json?cid=$cid', req);
   }
 }
