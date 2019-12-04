@@ -6,6 +6,7 @@ import 'package:enjoy_android/util/http_util.dart';
 import 'package:flutter/material.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:enjoy_android/global/common.dart';
+import 'package:flutter/services.dart';
 
 import '../../entity_factory.dart';
 
@@ -20,23 +21,18 @@ class _Register extends State<Register> {
   TextEditingController controller1 = new TextEditingController();
   TextEditingController controller2 = new TextEditingController();
   TextEditingController controller3 = new TextEditingController();
+  GlobalKey _globalKey = GlobalKey<FormState>();
 
 
   _doRegister() async {
     String username = controller1.text;
     String password = controller2.text;
     String repassword = controller3.text;
-    if(username.isEmpty){
-      BotToast.showText(text: '账号不能为空');
-    }else if(password.isEmpty){
-      BotToast.showText(text: '密码不能为空');
-    }else if(repassword.isEmpty){
-      BotToast.showText(text: '重复密码不能为空');
-    }else{
-      if(password != repassword){
-        BotToast.showText(text: '两次输入的密码不一致');
-        return;
-      }
+    if(password != repassword){
+      BotToast.showText(text: '两次输入的密码不一致');
+      return;
+    }
+    if((_globalKey.currentState as FormState).validate()){
       ApiService.register(username, password).then<Map>((json){
         RegisterEntity registerEntity = EntityFactory.generateOBJ(json);
         if(registerEntity.errorCode == 0){//注册成功
@@ -61,57 +57,82 @@ class _Register extends State<Register> {
       body: Center(
         child: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.only(top: 80,left: 30,right: 30),
-            child: Column(
-              children: <Widget>[
+            padding: EdgeInsets.only(left: 30,right: 30),
+            child: Form(
+              key: _globalKey,
+              autovalidate: true,
+              child: Column(
+                children: <Widget>[
 
-                TextField(
-                  controller: controller1,
-                  decoration: InputDecoration(
-                    labelText: '用户名：',
-                    helperText: '用户名应少于6个字符',
-                    hintText: '请输入用户名',
-                    prefixIcon: Icon(Icons.account_box),
+                  Text('注册新账号',style: TextStyle(fontSize: 24),),
+
+                  Padding(padding: EdgeInsets.only(top: 30)),
+
+                  TextFormField(
+                    controller: controller1,
+                    decoration: InputDecoration(
+                      labelText: '账号：',
+                      helperText: '账号长度至少3位！',
+                      hintText: '请输入账号',
+                      prefixIcon: Icon(Icons.account_box),
+                    ),
+                    validator: (v) {
+                      return v.trim().length >= 3 ? null : "账号长度至少3位！";
+                    }
                   ),
-                ),
 
-                TextField(
-                  controller: controller2,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: '密码：',
-                    helperText: '密码应少于6个字符',
-                    hintText: '请输入密码',
+                  TextFormField(
+                    controller: controller2,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: '密码：',
+                      helperText: '密码长度至少6位！',
+                      hintText: '请输入密码',
+                      prefixIcon: Icon(Icons.lock_outline),
+                    ),
+                    validator: (v) {
+                      return v.trim().length >= 6 ? null : "密码长度至少6位！";
+                    }
                   ),
-                ),
 
-                TextField(
-                  controller: controller3,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: '密码：',
-                    helperText: '密码应少于6个字符',
-                    hintText: '请再次输入密码',
+                  TextFormField(
+                    controller: controller3,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: '密码：',
+                      helperText: '密码长度至少6位！',
+                      hintText: '请再次输入密码',
+                      prefixIcon: Icon(Icons.lock_outline),
+                    ),
+                    validator: (v) {
+                      return v.trim().length >= 6 ? null : "密码长度至少6位！";
+                    }
                   ),
-                ),
 
-                MaterialButton(
-                  color: Colors.green,
-                  child: Text('注册'),
-                  onPressed: (){
-                    _doRegister();
-                  },
-                ),
+                  Padding(padding: EdgeInsets.only(top: 10)),
 
-                MaterialButton(
-                  color: Colors.green,
-                  child: Text('已有账号？去登录'),
-                  onPressed: (){
-                    goPop(context, null);
-                  },
-                ),
+                  MaterialButton(
+                    color: Colors.green,
+                    minWidth: double.infinity,
+                    child: Text('注册'),
+                    onPressed: (){
+                      _doRegister();
+                    },
+                  ),
 
-              ],
+                  Padding(padding: EdgeInsets.only(top: 20)),
+
+                  MaterialButton(
+                    minWidth: double.infinity,
+                    color: Colors.green,
+                    child: Text('已有账号？去登录'),
+                    onPressed: (){
+                      goPop(context, null);
+                    },
+                  ),
+
+                ],
+              ),
             ),
           ),
         )

@@ -1,105 +1,81 @@
-/**
- * https://www.wanandroid.com/user/register
- * 方法：POST
-		参数key-value
-		username,password,repassword
-
- * {
-		"data": {
-		"admin": false,
-		"chapterTops": [],
-		"collectIds": [],
-		"email": "",
-		"icon": "",
-		"id": 36765,
-		"nickname": "lihui",
-		"password": "",
-		"publicName": "lihui",
-		"token": "",
-		"type": 0,
-		"username": "lihui"
-		},
-		"errorCode": 0,
-		"errorMsg": ""
-		}
- */
 class RegisterEntity {
-	RegisterData data;
-	int errorCode;
-	String errorMsg;
+    RData data;
+    int errorCode;
+    String errorMsg;
 
-	RegisterEntity({this.data, this.errorCode, this.errorMsg});
+    RegisterEntity({this.data, this.errorCode, this.errorMsg});
 
-	RegisterEntity.fromJson(Map<String, dynamic> json) {
-		data = json['data'] != null ? new RegisterData.fromJson(json['data']) : null;
-		errorCode = json['errorCode'];
-		errorMsg = json['errorMsg'];
-	}
-
-	Map<String, dynamic> toJson() {
-		final Map<String, dynamic> data = new Map<String, dynamic>();
-		if (this.data != null) {
-      data['data'] = this.data.toJson();
+    factory RegisterEntity.fromJson(Map<String, dynamic> json) {
+        return RegisterEntity(
+            data: json['data'] != null ? RData.fromJson(json['data']) : null,
+            errorCode: json['errorCode'], 
+            errorMsg: json['errorMsg'], 
+        );
     }
-		data['errorCode'] = this.errorCode;
-		data['errorMsg'] = this.errorMsg;
-		return data;
-	}
+
+    Map<String, dynamic> toJson() {
+        final Map<String, dynamic> data = new Map<String, dynamic>();
+        data['errorCode'] = this.errorCode;
+        data['errorMsg'] = this.errorMsg;
+        if (this.data != null) {
+            data['data'] = this.data.toJson();
+        }
+        return data;
+    }
 }
 
-class RegisterData {
-	String password;
-	String publicName;
-	List<String> chapterTops;
-	String icon;
-	String nickname;
-	bool admin;
-	List<int> collectIds;
-	int id;
-	int type;
-	String email;
-	String token;
-	String username;
 
-	RegisterData({this.password, this.publicName, this.chapterTops, this.icon, this.nickname, this.admin, this.collectIds, this.id, this.type, this.email, this.token, this.username});
+class RData {
+    bool admin;
+    List<String> chapterTops;
+    List<int> collectIds;
+    String email;
+    String icon;
+    int id;
+    String nickname;
+    String password;
+    String publicName;
+    String token;
+    int type;
+    String username;
 
-	RegisterData.fromJson(Map<String, dynamic> json) {
-		password = json['password'];
-		publicName = json['publicName'];
-		if (json['chapterTops'] != null) {
-			chapterTops = new List<String>();
-		}
-		icon = json['icon'];
-		nickname = json['nickname'];
-		admin = json['admin'];
-		if (json['collectIds'] != null) {
-			collectIds = new List<int>();
-		}
-		id = json['id'];
-		type = json['type'];
-		email = json['email'];
-		token = json['token'];
-		username = json['username'];
-	}
+    RData({this.admin, this.chapterTops, this.collectIds, this.email, this.icon, this.id, this.nickname, this.password, this.publicName, this.token, this.type, this.username});
 
-	Map<String, dynamic> toJson() {
-		final Map<String, dynamic> data = new Map<String, dynamic>();
-		data['password'] = this.password;
-		data['publicName'] = this.publicName;
-		if (this.chapterTops != null) {
-      data['chapterTops'] =  [];
+    factory RData.fromJson(Map<String, dynamic> json) {
+        return RData(
+            admin: json['admin'],
+            chapterTops: json['chapterTops'] != null ? new List<String>.from(json['chapterTops']) : null,
+            collectIds: json['collectIds'] != null ? new List<int>.from(json['collectIds']) : null,
+            email: json['email'],
+            icon: json['icon'],
+            id: json['id'],
+            nickname: json['nickname'],
+            password: json['password'],
+            publicName: json['publicName'],
+            token: json['token'],
+            type: json['type'],
+            username: json['username'],
+        );
     }
-		data['icon'] = this.icon;
-		data['nickname'] = this.nickname;
-		data['admin'] = this.admin;
-		if (this.collectIds != null) {
-      data['collectIds'] =  [];
+
+    Map<String, dynamic> toJson() {
+        final Map<String, dynamic> data = new Map<String, dynamic>();
+        data['admin'] = this.admin;
+        data['email'] = this.email;
+        data['icon'] = this.icon;
+        data['id'] = this.id;
+        data['nickname'] = this.nickname;
+        data['password'] = this.password;
+        data['publicName'] = this.publicName;
+        data['token'] = this.token;
+        data['type'] = this.type;
+        data['username'] = this.username;
+        if (this.chapterTops != null) {
+            data['chapterTops'] = this.chapterTops;
+        }
+        if (this.collectIds != null) {
+            data['collectIds'] = this.collectIds;
+        }
+        return data;
     }
-		data['id'] = this.id;
-		data['type'] = this.type;
-		data['email'] = this.email;
-		data['token'] = this.token;
-		data['username'] = this.username;
-		return data;
-	}
 }

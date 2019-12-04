@@ -57,6 +57,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _refreshController.dispose();
+  }
+
   onRefresh() {
     _banner();
     _article(true);
@@ -173,11 +179,5 @@ class _HomePageState extends State<HomePage> {
         ),
       ),),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _refreshController.dispose();
   }
 }

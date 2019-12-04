@@ -22,6 +22,7 @@ class _Login extends State<Login> {
 
   TextEditingController controller1 = new TextEditingController();
   TextEditingController controller2 = new TextEditingController();
+  GlobalKey _globalKey = GlobalKey<FormState>();
 
 
   _doLogin() async {
@@ -56,68 +57,84 @@ class _Login extends State<Login> {
       body: Center(
         child: SingleChildScrollView(
           child: Container(
-            color: Colors.white,
-            padding: EdgeInsets.only(top: 100.0,left: 30,right: 30),
-            child: Column(
-              children: <Widget>[
+//            color: Colors.white,
+            padding: EdgeInsets.only(left: 30,right: 30),
+            child: Form(
+              key: _globalKey,
+              autovalidate: true,
+              child: Column(
+                children: <Widget>[
 
-                Text('登录到`玩Android`',style: TextStyle(fontSize: 24),),
+                  Text('登录到`玩Android`',style: TextStyle(fontSize: 24),),
 
-                Padding(padding: EdgeInsets.only(top: 30)),
+                  Padding(padding: EdgeInsets.only(top: 30)),
 
-                TextField(
-                  controller: controller1,
-                  decoration: InputDecoration(
-                    labelText: '用户名：',
-                    helperText: '用户名应少于6个字符',
-                    hintText: '请输入用户名',
-                    prefixIcon: Icon(Icons.account_box),
-                  ),
-                ),
-
-                TextField(
-                  controller: controller2,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: '密码：',
-                    helperText: '密码应少于6个字符',
-                    hintText: '请输入密码',
-                    prefixIcon: Icon(Icons.lock_outline),
-                  ),
-                ),
-
-                MaterialButton(
-                  color: Colors.green,
-                  child: Text('登录'),
-                  onPressed: (){
-                    _doLogin();
-                  },
-                ),
-
-                MaterialButton(
-                  color: Colors.green,
-                  child: Text('还没账号？去注册'),
-                  onPressed: (){
-                    Navigator
-                        .of(context).push(MaterialPageRoute(builder: (_)=> Register()))
-                        .then((onValue){
-                      if(onValue == null) return;
-                      Map<String,String> map = onValue;
-                      String txt1 = map['username'];
-                      String txt2 = map['password'];
-                      if(txt1.isNotEmpty) {
-                        controller1.text = txt1;
-                        if (txt2.isNotEmpty) {
-                          controller2.text = txt2;
-                          _doLogin();
-                          BotToast.showText(text: '正在登录...');
-                        }
+                  TextFormField(
+                    controller: controller1,
+                    decoration: InputDecoration(
+                      labelText: '账号：',
+//                      helperText: '账号长度至少3位！',
+                      hintText: '请输入账号',
+                      prefixIcon: Icon(Icons.account_box),
+                    ),
+                      validator: (v) {
+                        return v.trim().length >= 3 ? null : "账号长度至少3位！";
                       }
-                    });
-                  },
-                ),
+                  ),
 
-              ],
+                  TextFormField(
+                    controller: controller2,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: '密码：',
+//                      helperText: '密码长度至少6位！',
+                      hintText: '请输入密码',
+                      prefixIcon: Icon(Icons.lock_outline),
+                    ),
+                      validator: (v) {
+                        return v.trim().length >= 6 ? null : "密码长度至少6位！";
+                      }
+                  ),
+
+                  Padding(padding: EdgeInsets.only(top: 10)),
+
+                  MaterialButton(
+                    minWidth: double.infinity,
+                    color: Colors.green,
+                    child: Text('登录'),
+                    onPressed: (){
+                      _doLogin();
+                    },
+                  ),
+
+                  Padding(padding: EdgeInsets.only(top: 30)),
+
+                  MaterialButton(
+                    minWidth: double.infinity,
+                    color: Colors.green,
+                    child: Text('还没账号？去注册'),
+                    onPressed: (){
+                      Navigator
+                          .of(context).push(MaterialPageRoute(builder: (_)=> Register()))
+                          .then((onValue){
+                        if(onValue == null) return;
+                        Map<String,String> map = onValue;
+                        String txt1 = map['username'];
+                        String txt2 = map['password'];
+                        if(txt1.isNotEmpty) {
+                          controller1.text = txt1;
+                          if (txt2.isNotEmpty) {
+                            controller2.text = txt2;
+                            _doLogin();
+                            BotToast.showText(text: '正在登录...');
+                          }
+                        }
+                      });
+                    },
+                  ),
+
+                ],
+              ),
             ),
           ),
         )

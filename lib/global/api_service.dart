@@ -1,4 +1,5 @@
 
+import 'package:dio/dio.dart';
 import 'package:enjoy_android/entity/register_entity.dart';
 import 'package:enjoy_android/util/http_util.dart';
 
@@ -26,6 +27,17 @@ class ApiService{
       'repassword':password
     };
     return base(Api.register, req, type: HttpUtils.POST);
+//    FormData formData = new FormData.fromMap({
+//      'username':username,
+//      'password':password,
+//      'repassword':password
+//    });
+//    var json = await HttpUtils.request(
+//        Api.register,
+//        method: HttpUtils.POST,
+//        data: formData
+//    );
+//    return json;
   }
 
   ///
@@ -37,6 +49,16 @@ class ApiService{
       'password':password
     };
     return base(Api.login, req, type: HttpUtils.POST);
+//    FormData formData = new FormData.fromMap({
+//      'username':username,
+//      'password':password
+//    });
+//    var json = await HttpUtils.request(
+//        Api.register,
+//        method: HttpUtils.POST,
+//        data: formData
+//    );
+//    return json;
   }
 
   ///
