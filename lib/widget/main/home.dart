@@ -2,6 +2,8 @@ import 'package:enjoy_android/widget/main/home_page.dart';
 import 'package:enjoy_android/widget/main/project_page.dart';
 import 'package:enjoy_android/widget/main/search_page.dart';
 import 'package:enjoy_android/widget/main/system_page.dart';
+import 'package:enjoy_android/widget/sub/home_drawer.dart';
+import 'package:enjoy_android/global/common.dart';
 import 'package:flutter/material.dart';
 
 
@@ -38,8 +40,13 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
 //    User().refreshUserData();
     return Scaffold(
+      drawer: Drawer(child: HomeDrawer(context).homeDrawer(),),
       appBar: AppBar(
         title: Text('玩Android'),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.search), onPressed: () { goTo(context, SearchPage()); }),
+          IconButton(icon: Icon(Icons.add), onPressed: () {}),
+        ],
       ),
       body: PageView(
         physics: NeverScrollableScrollPhysics(),

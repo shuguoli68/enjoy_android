@@ -37,12 +37,12 @@ class _Login extends State<Login> {
       ApiService.login(username, password).then<Map>((json){
         LoginEntity loginEntity = EntityFactory.generateOBJ(json);
         if(loginEntity.errorCode == 0){//登录成功
-          spSetBool(SPKey.IS_LOGIN, true);
+          SPKey.spSetBool(SPKey.IS_LOGIN, true);
           goToRm(context, Home());
         }else{//登录失败
           print('登录失败：'+loginEntity.errorMsg);
           BotToast.showText(text: loginEntity.errorMsg);
-          spSetBool(SPKey.IS_LOGIN, false);
+          SPKey.spSetBool(SPKey.IS_LOGIN, false);
         }
         return null;
       });

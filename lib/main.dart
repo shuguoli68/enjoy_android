@@ -8,24 +8,53 @@ import 'package:enjoy_android/widget/main/home.dart';
 import 'package:enjoy_android/widget/sub/login.dart';
 import 'package:flutter/material.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:provide/provide.dart';
+
+import 'global/theme_colors.dart';
+import 'global/theme_provide.dart';
 
 
-void main() => runApp(MyApp());
+void main() {
+  var providers = Providers();
+
+  providers.provide(Provider.function((context)=> ThemeProvide()));
+
+  int themeIndex;
+  SPKey.spGetInt(SPKey.themeIndex).then((onValue){
+    print('theme:$themeIndex, $onValue');
+    themeIndex = onValue;
+  });
+  themeIndex =  null == themeIndex ? 0 : themeIndex;
+  runApp(ProviderNode(child: MyApp(themeIndex), providers: providers));
+}
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  int themeIndex;
+
+  MyApp(this.themeIndex);
+
+  _themeColor(ThemeProvide theme, String type){
+    return THColors.themeColor[theme.value != null ? theme.value: themeIndex][type];
+  }
   @override
   Widget build(BuildContext context) {
-    return BotToastInit(
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        debugShowCheckedModeBanner: false,
-        home: Splash(),
-        navigatorObservers: [BotToastNavigatorObserver()],
-      ),
+    return Provide<ThemeProvide>(
+      builder: (context,child,theme){
+        return BotToastInit(
+          child: MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              primaryColor: _themeColor(theme,'primaryColor'),
+              primaryColorDark: _themeColor(theme,'colorPrimaryDark'),
+              primaryColorLight: _themeColor(theme,'colorPrimaryLight'),
+              accentColor:  _themeColor(theme,'colorAccent'),
+            ),
+            debugShowCheckedModeBanner: false,
+            home: Splash(),
+            navigatorObservers: [BotToastNavigatorObserver()],
+          ),
+        );
+      },
     );
   }
 }
@@ -44,7 +73,7 @@ class _SplashState extends State<Splash> {
   void initState(){
     super.initState();
     timer = Timer(const Duration(milliseconds: 1500),(){
-      Future isLogin = spGetBool(SPKey.IS_LOGIN);
+      Future isLogin = SPKey.spGetBool(SPKey.IS_LOGIN);
       isLogin.then((onValue){
         if(onValue){
           goToRm(context, Home());

@@ -59,4 +59,13 @@ class Api {
   ///方法：GET, 参数：cid 分类的id，上面项目分类接口; 页码：拼接在链接中，从1开始。
   ///
   static const String projectSub = '/project/list/';
+
+
+  ///
+  ///搜索热词: https://www.wanandroid.com/hotkey/json
+  ///方法：GET, 参数：无
+  ///
+  static const String hotword = '/hotkey/json';
+
+
 }

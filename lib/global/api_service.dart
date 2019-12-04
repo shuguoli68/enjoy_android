@@ -126,4 +126,13 @@ class ApiService{
     };
     return base(Api.projectSub+'$page/json?cid=$cid', req);
   }
+
+  ///
+  /// 搜索热词
+  ///
+  static Future<Map> hotword()async{
+    var req = {
+    };
+    return base(Api.hotword, req);
+  }
 }
