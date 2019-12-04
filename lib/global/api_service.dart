@@ -135,4 +135,14 @@ class ApiService{
     };
     return base(Api.hotword, req);
   }
+
+  ///
+  /// 搜索
+  ///
+  static Future<Map> search(int page, String key)async{
+    var req = {
+      'k':key
+    };
+    return base(Api.search+'$page/json', req, type: HttpUtils.POST);
+  }
 }

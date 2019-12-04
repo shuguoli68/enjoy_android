@@ -6,9 +6,11 @@ import 'package:enjoy_android/entity/register_entity.dart';
 import 'package:enjoy_android/entity/system_sub_entity.dart';
 import 'package:enjoy_android/entity/system_tree_entity.dart';
 
+import 'entity/hot_word_entity.dart';
 import 'entity/navigate_entity.dart';
 import 'entity/project_entity.dart';
 import 'entity/project_tab_entity.dart';
+import 'entity/search_result_entity.dart';
 
 class EntityFactory {
   static T generateOBJ<T>(json) {
@@ -34,6 +36,10 @@ class EntityFactory {
       return ProjectTabEntity.fromJson(json) as T;
     }else if (T.toString() == "ProjectEntity") {
       return ProjectEntity.fromJson(json) as T;
+    }else if (T.toString() == "HotwordEntity") {
+      return HotwordEntity.fromJson(json) as T;
+    }else if (T.toString() == "SearchResultEntity") {
+      return SearchResultEntity.fromJson(json) as T;
     }else {
       return null;
     }

@@ -67,5 +67,9 @@ class Api {
   ///
   static const String hotword = '/hotkey/json';
 
-
+  ///
+  ///搜索: https://www.wanandroid.com/article/query/0/json
+  ///方法：POST, 参数：k ： 搜索关键词; 页码：拼接在链接上，从0开始。
+  ///
+  static const String search = '/article/query/';
 }

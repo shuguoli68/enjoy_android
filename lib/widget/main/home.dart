@@ -4,6 +4,7 @@ import 'package:enjoy_android/widget/main/search_page.dart';
 import 'package:enjoy_android/widget/main/system_page.dart';
 import 'package:enjoy_android/widget/sub/home_drawer.dart';
 import 'package:enjoy_android/global/common.dart';
+import 'package:enjoy_android/widget/sub/search_hot.dart';
 import 'package:flutter/material.dart';
 
 
@@ -44,7 +45,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text('玩Android'),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.search), onPressed: () { goTo(context, SearchPage()); }),
+          IconButton(icon: Icon(Icons.search), onPressed: () { goTo(context, SearchHot()); }),
           IconButton(icon: Icon(Icons.add), onPressed: () {}),
         ],
       ),
