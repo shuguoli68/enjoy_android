@@ -46,11 +46,11 @@ class ApiService{
   ///登录
   ///
   static Future<Map> login(String username, String password)async{
-    var req = {
-      'username':username,
-      'password':password
-    };
-    return base(Api.login, req, type: HttpUtils.POST);
+//    var req = {
+//      'username':username,
+//      'password':password
+//    };
+//    return base(Api.login, req, type: HttpUtils.POST);
 //    FormData formData = new FormData.fromMap({
 //      'username':username,
 //      'password':password
@@ -61,6 +61,13 @@ class ApiService{
 //        data: formData
 //    );
 //    return json;
+
+    FormData formData = new FormData.fromMap({
+      "username": "$username",
+      "password": "$password",
+    });
+    var response = await Dio().post(Api.login, data: formData);
+    return response.data;
   }
 
   ///

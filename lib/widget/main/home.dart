@@ -5,6 +5,7 @@ import 'package:enjoy_android/widget/main/search_page.dart';
 import 'package:enjoy_android/widget/main/system_page.dart';
 import 'package:enjoy_android/widget/sub/home_drawer.dart';
 import 'package:enjoy_android/global/common.dart';
+import 'package:enjoy_android/widget/sub/login.dart';
 import 'package:enjoy_android/widget/sub/search_hot.dart';
 import 'package:flutter/material.dart';
 
@@ -48,6 +49,7 @@ class _HomeState extends State<Home> {
         actions: <Widget>[
           IconButton(icon: Icon(Icons.search), onPressed: () { goTo(context, SearchHot()); }),
           IconButton(icon: Icon(Icons.add), onPressed: () { ApiService.testpost(); }),
+          IconButton(icon: Icon(Icons.local_phone),onPressed: (){ goToRm(context, Login()); },)
         ],
       ),
       body: PageView(
