@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:enjoy_android/entity/register_entity.dart';
 import 'package:enjoy_android/util/http_util.dart';
@@ -143,6 +145,26 @@ class ApiService{
     var req = {
       'k':key
     };
-    return base(Api.search+'$page/json', req, type: HttpUtils.POST);
+//    return base(Api.search+'$page/json', req, type: HttpUtils.POST);
+    Options baseOptions = Options(headers: {/*HttpHeaders.acceptHeader:"accept: application/json", HttpHeaders.contentTypeHeader:"application/json;charset=UTF-8",*/ "Cookie":""});
+    Response  response = await Dio().post(Api.baseUrl+Api.search+'$page/json',data: req, options: baseOptions);
+    return response.data;
+  }
+
+  ///
+  /// post请求
+  ///
+  static Future<Map> testpost()async{
+    var req = {
+      'type':'android',
+      'bundle_id':'000',
+      'api_token':'000'
+    };
+    Options baseOptions = Options(headers: {HttpHeaders.acceptHeader:"accept: application/json", HttpHeaders.contentTypeHeader:"Content-Type: application/json"});
+    Response  response = await Dio().post('http://api.fir.im/apps',data: req,options: baseOptions);
+    print('结果： ------start-------');
+    print(response.data);
+    print('结果： ------end-------');
+    return response.data;
   }
 }
