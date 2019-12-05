@@ -3,18 +3,19 @@
 import 'dart:async';
 
 import 'package:enjoy_android/global/common.dart';
-import 'package:enjoy_android/global/sp_key.dart';
 import 'package:enjoy_android/widget/main/home.dart';
 import 'package:enjoy_android/widget/sub/login.dart';
 import 'package:flutter/material.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:provide/provide.dart';
 
+import 'global/sp_key.dart';
 import 'global/theme_colors.dart';
 import 'global/theme_provide.dart';
 
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   var providers = Providers();
 
   providers.provide(Provider.function((context)=> ThemeProvide()));
@@ -78,8 +79,8 @@ class _SplashState extends State<Splash> {
         if(onValue){
           goToRm(context, Home());
         }else{
-//          goToRm(context, Login());
-          goToRm(context, Home());
+          goToRm(context, Login());
+//          goToRm(context, Home());
         }
       });
     });

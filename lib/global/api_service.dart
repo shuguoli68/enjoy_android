@@ -10,64 +10,50 @@ import 'api.dart';
 
 class ApiService{
 
-  static Future<Map> base(String url, Map req, {String type})async{
+  static Future<Map> base(String url, Map req)async{
     var json = await HttpUtils.request(
         url,
-        method: type==null||type.isEmpty?HttpUtils.GET:type,
+        method: HttpUtils.GET,
         data: req
     );
     return json;
+  }
+
+  static Future<Map> basePost(String url, {FormData req})async{
+    var result;
+    try {
+      print('post请求参数：' + req.toString());
+      var response = await Dio().post(Api.baseUrl + url, data: req);
+      result = response.data;
+      print('post响应数据：' + response.toString());
+    }on DioError catch (e) {
+      /// 打印请求失败相关信息
+      print('post请求出错：' + e.toString());
+    }
+    return result;
   }
 
   ///
   ///注册
   ///
   static Future<Map> register(String username, String password)async{
-    var req = {
+    FormData req = new FormData.fromMap({
       'username':username,
       'password':password,
       'repassword':password
-    };
-    return base(Api.register, req, type: HttpUtils.POST);
-//    FormData formData = new FormData.fromMap({
-//      'username':username,
-//      'password':password,
-//      'repassword':password
-//    });
-//    var json = await HttpUtils.request(
-//        Api.register,
-//        method: HttpUtils.POST,
-//        data: formData
-//    );
-//    return json;
+    });
+    return basePost(Api.register, req: req);
   }
 
   ///
   ///登录
   ///
   static Future<Map> login(String username, String password)async{
-//    var req = {
-//      'username':username,
-//      'password':password
-//    };
-//    return base(Api.login, req, type: HttpUtils.POST);
-//    FormData formData = new FormData.fromMap({
-//      'username':username,
-//      'password':password
-//    });
-//    var json = await HttpUtils.request(
-//        Api.register,
-//        method: HttpUtils.POST,
-//        data: formData
-//    );
-//    return json;
-
-    FormData formData = new FormData.fromMap({
+    FormData req = new FormData.fromMap({
       "username": "$username",
       "password": "$password",
     });
-    var response = await Dio().post(Api.login, data: formData);
-    return response.data;
+    return basePost(Api.login, req: req);
   }
 
   ///
@@ -149,13 +135,10 @@ class ApiService{
   /// 搜索
   ///
   static Future<Map> search(int page, String key)async{
-    var req = {
+    FormData req = new FormData.fromMap({
       'k':key
-    };
-//    return base(Api.search+'$page/json', req, type: HttpUtils.POST);
-    Options baseOptions = Options(headers: {/*HttpHeaders.acceptHeader:"accept: application/json", HttpHeaders.contentTypeHeader:"application/json;charset=UTF-8",*/ "Cookie":""});
-    Response  response = await Dio().post(Api.baseUrl+Api.search+'$page/json',data: req, options: baseOptions);
-    return response.data;
+    });
+    return basePost(Api.search+'$page/json', req: req);
   }
 
   ///

@@ -37,6 +37,7 @@ class _Login extends State<Login> {
       ApiService.login(username, password).then<Map>((json){
         LoginEntity loginEntity = EntityFactory.generateOBJ(json);
         if(loginEntity.errorCode == 0){//登录成功
+          print('登录成功');
           SPKey.spSetBool(SPKey.IS_LOGIN, true);
           goToRm(context, Home());
         }else{//登录失败

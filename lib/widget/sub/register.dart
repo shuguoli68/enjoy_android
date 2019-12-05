@@ -36,6 +36,7 @@ class _Register extends State<Register> {
       ApiService.register(username, password).then<Map>((json){
         RegisterEntity registerEntity = EntityFactory.generateOBJ(json);
         if(registerEntity.errorCode == 0){//注册成功
+          print('注册成功');
           Map<String,String> map = {
             'username':username,
             'password':password

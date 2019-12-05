@@ -35,32 +35,34 @@ class _SearchHotState extends State<SearchHot> {
       appBar: AppBar(
         title: Text('搜索'),
       ),
-      body: Container(
-        color: Colors.white70,
-        child: Column(
-          children: <Widget>[
+      body: SingleChildScrollView(
+        child: Container(
+          color: Colors.white70,
+          child: Column(
+            children: <Widget>[
 
-            Container(
-              color: Colors.white,
-              child: TextField(
-                maxLines: 1,
-                textInputAction: TextInputAction.search,
-                decoration: InputDecoration(
-                  hintText: '请输入关键字...',
-                  prefixIcon: Icon(Icons.search),
+              Container(
+                color: Colors.white,
+                child: TextField(
+                  maxLines: 1,
+                  textInputAction: TextInputAction.search,
+                  decoration: InputDecoration(
+                    hintText: '请输入关键字...',
+                    prefixIcon: Icon(Icons.search),
+                  ),
+                  onChanged: ((value){
+                    _reqData(value);
+                  }),
+                  onSubmitted: ((value){
+                    _reqData(value);
+                  }),
                 ),
-                onChanged: ((value){
-                  _reqData(value);
-                }),
-                onSubmitted: ((value){
-                  _reqData(value);
-                }),
               ),
-            ),
 
-            _resultWidget(),
+              _resultWidget(),
 
-          ],
+            ],
+          ),
         ),
       ),
     );
