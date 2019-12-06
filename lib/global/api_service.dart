@@ -12,21 +12,22 @@ import 'api.dart';
 class ApiService{
 
   static Map<String, String> _headerMap;
-  static Options _getOptions() {
+  static Map<String, String> _getHeader() {
     if (null == _headerMap) {
       _headerMap = Map();
       SPKey.spGetStr(SPKey.COOKIE).then((onValue){
         _headerMap["Cookie"] = onValue;
       });
     }
-    return Options(headers: _headerMap);
+    return _headerMap;
   }
 
-  static Future<Map> base(String url, Map req)async{
+  static Future<Map> base(String url, Map req,)async{
     var json = await HttpUtils.request(
         url,
         method: HttpUtils.GET,
-        data: req
+        data: req,
+        header: _headerMap,
     );
     return json;
   }
@@ -41,7 +42,7 @@ class ApiService{
       }
       r.write('}');
       print('post请求参数：' + r.toString());
-      response = await Dio().post(Api.baseUrl + url, data: req, options: _getOptions());
+      response = await Dio().post(Api.baseUrl + url, data: req, options: Options(headers: _getHeader()));
       print('post响应数据：' + response.toString());
     }on DioError catch (e) {
       /// 打印请求失败相关信息
@@ -182,4 +183,52 @@ class ApiService{
     print('结果： ------end-------');
     return response.data;
   }
+
+  ///
+  /// 积分排行榜
+  ///
+  static Future<Map> scoreRank(int page)async{
+    var req = {
+    };
+    return base(Api.scoreRank+'$page/json', req);
+  }
+
+  ///
+  ///个人积分
+  ///
+  static Future<Response> myScore()async{
+    FormData req = new FormData.fromMap({
+
+    });
+    return basePost(Api.myScore, req: req);
+  }
+
+  ///
+  ///收藏文章
+  ///
+  static Future<Response> collect(int id)async{
+    FormData req = new FormData.fromMap({
+
+    });
+    return basePost(Api.collect+'$id/json', req: req);
+  }
+
+  ///
+  ///取消收藏文章
+  ///
+  static Future<Response> uncollect(int id)async{
+    FormData req = new FormData.fromMap({
+
+    });
+    return basePost(Api.uncollect+'$id/json', req: req);
+  }
+
+  ///收藏文章列表
+  ///
+  static Future<Map> collectList(int page)async{
+    var req = {
+    };
+    return base(Api.collectList+'$page/json', req);
+  }
+
 }

@@ -4,6 +4,7 @@ import 'package:banner/banner.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:enjoy_android/entity/home_article_entity.dart';
 import 'package:enjoy_android/entity/home_banner_entity.dart';
+import 'package:enjoy_android/entity/logout_entity.dart';
 import 'package:enjoy_android/global/api_service.dart';
 import 'package:enjoy_android/global/common.dart';
 import 'package:enjoy_android/widget/web_widget.dart';
@@ -157,7 +158,10 @@ class _HomePageState extends State<HomePage> {
     HomeArticleDataData item = datas[index];
     return GestureDetector(
       onTap: (){
-        goTo(context, WebWidget(url: item.link,title: item.chapterName,));
+//        goTo(context, WebWidget(url: item.link,title: item.chapterName,));
+      ApiService.collectList(0).then((value){
+
+      });
       },
       child: Padding(padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),child: Container(
         padding: EdgeInsets.all(5.0),
@@ -172,7 +176,10 @@ class _HomePageState extends State<HomePage> {
               ClipOval(
                 child: Image.asset('images/default.png',width: 50,height: 50,fit: BoxFit.fitHeight,),
               ),
-              Expanded(flex:1, child: Padding(padding: EdgeInsets.only(left: 5),child: Text(item.title, style: TextStyle(fontSize: 16),maxLines: 3,),),)
+              Expanded(flex:1, child: Padding(padding: EdgeInsets.only(left: 5),child: Text(item.title, style: TextStyle(fontSize: 16),maxLines: 3,),),),
+              IconButton(icon: Icon(item.collect?Icons.favorite:Icons.favorite_border,color: Colors.red,), onPressed: (){
+                _collect(item);
+              })
             ],),
             Padding(padding: EdgeInsets.all(3)),
             Flex(direction: Axis.horizontal,children: <Widget>[
@@ -183,5 +190,30 @@ class _HomePageState extends State<HomePage> {
         ),
       ),),
     );
+  }
+
+  _collect(HomeArticleDataData item){
+    if(item.collect){//取消收藏
+      ApiService.uncollect(item.id).then((json){
+        LogoutEntity entity = EntityFactory.generateOBJ(json.data);
+        if(entity.errorCode == 0){//成功
+          myToast('已取消收藏');
+        }else{//失败
+          myToast(entity.errorMsg);
+        }
+      });
+    }else{//收藏
+      ApiService.collect(item.id).then((json){
+        LogoutEntity entity = EntityFactory.generateOBJ(json.data);
+        if(entity.errorCode == 0){//成功
+          myToast('已收藏');
+        }else{//失败
+          myToast(entity.errorMsg);
+        }
+      });
+    }
+    setState(() {
+      item.collect = !item.collect;
+    });
   }
 }

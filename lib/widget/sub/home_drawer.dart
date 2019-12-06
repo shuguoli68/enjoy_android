@@ -5,8 +5,11 @@ import 'package:enjoy_android/global/sp_key.dart';
 import 'package:enjoy_android/global/theme_colors.dart';
 import 'package:enjoy_android/global/theme_provide.dart';
 import 'package:enjoy_android/global/common.dart';
+import 'package:enjoy_android/widget/sub/score_rank.dart';
 import 'package:flutter/material.dart';
 import 'package:provide/provide.dart';
+
+import 'collect_list.dart';
 
 
 class HomeDrawer {
@@ -93,11 +96,10 @@ class HomeDrawer {
             ),
           ),
           child: ListTile(
-            leading: CircleAvatar(child: Text('A'),),
-            title: Text('This is item A'),
+            leading: CircleAvatar(child: Text('藏'),),
+            title: Text('收藏列表'),
             onTap: (){
-              print('点击A');
-              BotToast.showText(text:'点击A');
+              goTo(context, CollectList());
             },
           ),
         ),
@@ -109,11 +111,10 @@ class HomeDrawer {
             ),
           ),
           child: ListTile(
-            leading: CircleAvatar(child: Text('B'),),
-            title: Text('This is item B'),
+            leading: CircleAvatar(child: Text('分'),),
+            title: Text('积分排行榜'),
             onTap: (){
-              print('点击B');
-              BotToast.showText(text:'点击B');
+              goTo(context, ScoreRank());
             },
           ),
         ),
@@ -125,7 +126,7 @@ class HomeDrawer {
             ),
           ),
           child: ListTile(
-            leading: CircleAvatar(child: Text('C'),),
+            leading: CircleAvatar(child: Text('切'),),
             title: Text('切换主题'),
             onTap: (){
               print('切换主题');
@@ -141,7 +142,7 @@ class HomeDrawer {
             ),
           ),
           child: ListTile(
-            leading: CircleAvatar(child: Text('OFF'),),
+            leading: CircleAvatar(child: Text('退'),),
             title: Text('退出登录'),
             onTap: (){
               logout(context);

@@ -36,7 +36,7 @@ class HttpUtils {
   /// request method
   static Future<Map> request (
       String url,
-      { data, method }) async {
+      { data, method , header}) async {
 
     data = data ?? {};
     method = method ?? 'GET';
@@ -58,7 +58,7 @@ class HttpUtils {
     var result;
 
     try {
-      Response response = await dio.request(url, data: data, options: new Options(method: method));
+      Response response = await dio.request(url, data: data, options: new Options(method: method,headers: header));
 
       result = response.data;
 

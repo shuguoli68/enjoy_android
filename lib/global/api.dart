@@ -78,4 +78,30 @@ class Api {
   ///方法：POST, 参数：k ： 搜索关键词; 页码：拼接在链接上，从0开始。
   ///
   static const String search = '/article/query/';
+
+  ///
+  ///积分排行榜: https://www.wanandroid.com/coin/rank/1/json
+  ///方法：GET, 参数：分页page
+  ///
+  static const String scoreRank = '/coin/rank/';
+
+  ///
+  ///个人积分: https://www.wanandroid.com/lg/coin/userinfo/json
+  ///
+  static const String myScore = '/lg/coin/userinfo/json';
+
+  ///
+  ///收藏文章: https://www.wanandroid.com/lg/collect/1165/json
+  ///
+  static const String collect = '/lg/collect/';
+
+  ///
+  ///取消收藏文章: https://www.wanandroid.com/lg/uncollect_originId/2333/json
+  ///
+  static const String uncollect = '/lg/uncollect_originId/';
+
+  ///
+  ///收藏文章列表: https://www.wanandroid.com/lg/collect/list/0/json
+  ///
+  static const String collectList = '/lg/collect/list/';
 }
