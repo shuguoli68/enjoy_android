@@ -2,7 +2,6 @@ import 'package:enjoy_android/entity/logout_entity.dart';
 import 'package:enjoy_android/widget/sub/login.dart';
 import 'package:flutter/material.dart';
 import 'package:enjoy_android/global/my_public.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../entity_factory.dart';
 import 'api_service.dart';
