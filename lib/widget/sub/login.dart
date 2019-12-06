@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:enjoy_android/global/api_service.dart';
 import 'package:enjoy_android/widget/sub/register.dart';
@@ -34,10 +36,24 @@ class _Login extends State<Login> {
       BotToast.showText(text: '密码不能为空');
     }else{
 
-      ApiService.login(username, password).then<Map>((json){
-        LoginEntity loginEntity = EntityFactory.generateOBJ(json);
+      ApiService.login(username, password).then<Response>((response){
+        LoginEntity loginEntity = EntityFactory.generateOBJ(response.data);
         if(loginEntity.errorCode == 0){//登录成功
           print('登录成功');
+          String cookie = "";
+          response.headers.forEach((String name, List<String> values) {
+            if (name == "set-cookie") {
+              cookie = json
+                  .encode(values)
+                  .replaceAll("\[\"", "")
+                  .replaceAll("\"\]", "")
+                  .replaceAll("\",\"", "; ");
+            }
+          });
+          print('cookie:$cookie');
+          SPKey.spSetStr(SPKey.USER_NAME, username);
+          SPKey.spSetStr(SPKey.PASS_WORD, password);
+          SPKey.spSetStr(SPKey.COOKIE, cookie);
           SPKey.spSetBool(SPKey.IS_LOGIN, true);
           goToRm(context, Home());
         }else{//登录失败
@@ -45,7 +61,7 @@ class _Login extends State<Login> {
           BotToast.showText(text: loginEntity.errorMsg);
           SPKey.spSetBool(SPKey.IS_LOGIN, false);
         }
-        return null;
+        return;
       });
     }
   }

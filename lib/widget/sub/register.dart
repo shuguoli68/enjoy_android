@@ -33,8 +33,8 @@ class _Register extends State<Register> {
       return;
     }
     if((_globalKey.currentState as FormState).validate()){
-      ApiService.register(username, password).then<Map>((json){
-        RegisterEntity registerEntity = EntityFactory.generateOBJ(json);
+      ApiService.register(username, password).then<Response>((json){
+        RegisterEntity registerEntity = EntityFactory.generateOBJ(json.data);
         if(registerEntity.errorCode == 0){//注册成功
           print('注册成功');
           Map<String,String> map = {

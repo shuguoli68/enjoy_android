@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:enjoy_android/global/api_service.dart';
 import 'package:enjoy_android/widget/main/home_page.dart';
 import 'package:enjoy_android/widget/main/project_page.dart';
@@ -48,7 +49,7 @@ class _HomeState extends State<Home> {
         title: Text('玩Android'),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.search), onPressed: () { goTo(context, SearchHot()); }),
-          IconButton(icon: Icon(Icons.add), onPressed: () { ApiService.testpost(); }),
+          IconButton(icon: Icon(Icons.add), onPressed: () {  }),
           IconButton(icon: Icon(Icons.local_phone),onPressed: (){ goToRm(context, Login()); },)
         ],
       ),

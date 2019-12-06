@@ -3,12 +3,24 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:enjoy_android/entity/register_entity.dart';
+import 'package:enjoy_android/global/sp_key.dart';
 import 'package:enjoy_android/util/http_util.dart';
 
 import '../entity_factory.dart';
 import 'api.dart';
 
 class ApiService{
+
+  static Map<String, String> _headerMap;
+  static Options _getOptions() {
+    if (null == _headerMap) {
+      _headerMap = Map();
+      SPKey.spGetStr(SPKey.COOKIE).then((onValue){
+        _headerMap["Cookie"] = onValue;
+      });
+    }
+    return Options(headers: _headerMap);
+  }
 
   static Future<Map> base(String url, Map req)async{
     var json = await HttpUtils.request(
@@ -19,24 +31,29 @@ class ApiService{
     return json;
   }
 
-  static Future<Map> basePost(String url, {FormData req})async{
-    var result;
+  static Future<Response> basePost(String url, {FormData req})async{
+    var response;
     try {
-      print('post请求参数：' + req.toString());
-      var response = await Dio().post(Api.baseUrl + url, data: req);
-      result = response.data;
+      StringBuffer r = StringBuffer('{');
+      for(int i = 0; i < req.fields.length; i++){
+        r.write('"' + req.fields[i].key + '"');
+        r.write(':"' + req.fields[i].value + '",');
+      }
+      r.write('}');
+      print('post请求参数：' + r.toString());
+      response = await Dio().post(Api.baseUrl + url, data: req, options: _getOptions());
       print('post响应数据：' + response.toString());
     }on DioError catch (e) {
       /// 打印请求失败相关信息
       print('post请求出错：' + e.toString());
     }
-    return result;
+    return response;
   }
 
   ///
   ///注册
   ///
-  static Future<Map> register(String username, String password)async{
+  static Future<Response> register(String username, String password)async{
     FormData req = new FormData.fromMap({
       'username':username,
       'password':password,
@@ -48,7 +65,7 @@ class ApiService{
   ///
   ///登录
   ///
-  static Future<Map> login(String username, String password)async{
+  static Future<Response> login(String username, String password)async{
     FormData req = new FormData.fromMap({
       "username": "$username",
       "password": "$password",
@@ -134,7 +151,7 @@ class ApiService{
   ///
   /// 搜索
   ///
-  static Future<Map> search(int page, String key)async{
+  static Future<Response> search(int page, String key)async{
     FormData req = new FormData.fromMap({
       'k':key
     });

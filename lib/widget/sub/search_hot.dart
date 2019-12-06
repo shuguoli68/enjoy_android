@@ -1,4 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:dio/dio.dart';
 import 'package:enjoy_android/entity/hot_word_entity.dart';
 import 'package:enjoy_android/entity/search_result_entity.dart';
 import 'package:enjoy_android/global/api_service.dart';
@@ -32,38 +33,34 @@ class _SearchHotState extends State<SearchHot> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      backgroundColor: Color(0xFFECECEC),
       appBar: AppBar(
         title: Text('搜索'),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          color: Colors.white70,
-          child: Column(
-            children: <Widget>[
-
-              Container(
-                color: Colors.white,
-                child: TextField(
-                  maxLines: 1,
-                  textInputAction: TextInputAction.search,
-                  decoration: InputDecoration(
-                    hintText: '请输入关键字...',
-                    prefixIcon: Icon(Icons.search),
-                  ),
-                  onChanged: ((value){
-                    _reqData(value);
-                  }),
-                  onSubmitted: ((value){
-                    _reqData(value);
-                  }),
+      body: Flex(
+        direction: Axis.vertical,
+        children: <Widget>[
+          SingleChildScrollView(
+            child: Container(
+              color: Colors.white,
+              child: TextField(
+                maxLines: 1,
+                textInputAction: TextInputAction.search,
+                decoration: InputDecoration(
+                  hintText: '请输入关键字...',
+                  prefixIcon: Icon(Icons.search),
                 ),
+                onChanged: ((value){
+                  _reqData(value);
+                }),
+                onSubmitted: ((value){
+                  _reqData(value);
+                }),
               ),
-
-              _resultWidget(),
-
-            ],
+            ),
           ),
-        ),
+          Expanded(child: _resultWidget(),)
+        ],
       ),
     );
   }
@@ -85,8 +82,8 @@ class _SearchHotState extends State<SearchHot> {
 
   _reqData(String key){
     keyWord = key;
-    ApiService.search(page, key).then((json){
-      SearchResultEntity entity = EntityFactory.generateOBJ(json);
+    ApiService.search(page, key).then<Response>((json){
+      SearchResultEntity entity = EntityFactory.generateOBJ(json.data);
       if(entity.errorCode == 0){//成功
         List<RDataX> mData = entity.data.datas;
         setState(() {
@@ -122,7 +119,6 @@ class _SearchHotState extends State<SearchHot> {
         canRefresh: false,
         onLoading: onLoading,
         child: ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
           padding: EdgeInsets.all(2),
           itemBuilder: (BuildContext context, int index) {
             return _itemWidget(index);
@@ -134,12 +130,27 @@ class _SearchHotState extends State<SearchHot> {
   }
 
   _itemWidget(int index){
-    return Container(
-      color: Colors.white,
-      child: Column(children: <Widget>[
-        Padding(padding: EdgeInsets.all(5), child: Text(datas[index].niceShareDate),),
-        Padding(padding: EdgeInsets.all(5), child: Text(datas[index].title),),
-      ],),
+    RDataX item = datas[index];
+    return GestureDetector(
+      onTap: (){
+        goTo(context, WebWidget(url: item.link,title: item.chapterName,));
+      },
+      child: Container(
+        alignment: Alignment.centerLeft,
+        margin: EdgeInsets.all(5),
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        ),
+        child: Column(children: <Widget>[
+          Padding(padding: EdgeInsets.all(5), child: Text(item.title,style: TextStyle(fontSize: 16),),),
+          Flex(direction: Axis.horizontal, children: <Widget>[
+            Expanded(flex:1, child: Padding(padding: EdgeInsets.all(5), child: Text(item.author.isNotEmpty?'作者：${item.author}':'分享自：${item.shareUser}',textAlign: TextAlign.left,),),),
+            Expanded(flex:1, child: Padding(padding: EdgeInsets.all(5), child: Text('分享于：'+item.niceShareDate),),)
+          ],),
+        ],),
+      ),
     );
   }
 

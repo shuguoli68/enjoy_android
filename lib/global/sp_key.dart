@@ -7,14 +7,19 @@ class SPKey{
   static const String IS_FIRST = "IS_FIRST";
   //是否已登录
   static const String IS_LOGIN = "IS_LOGIN";
-
+  //用户账号
+  static const String USER_NAME = "USER_NAME";
+  //用户密码
+  static const String PASS_WORD = "PASS_WORD";
+  //登录返回的cookie
+  static const String COOKIE = "COOKIE";
 
   static spSetStr(String key, String value) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setString(key, value);
   }
 
-  static spGetStr(String key) async {
+  static Future<String> spGetStr(String key) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     String a = sp.getString(key);
     if(a==null) return "";
