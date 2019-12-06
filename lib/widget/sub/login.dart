@@ -58,7 +58,6 @@ class _Login extends State<Login> {
         }else{//登录失败
           print('登录失败：'+loginEntity.errorMsg);
           myToast(loginEntity.errorMsg);
-          SPKey.spSetBool(SPKey.IS_LOGIN, false);
         }
         return;
       });
@@ -112,7 +111,7 @@ class _Login extends State<Login> {
                       }
                   ),
 
-                  Padding(padding: EdgeInsets.only(top: 10)),
+                  Padding(padding: EdgeInsets.only(top: 30)),
 
                   MaterialButton(
                     minWidth: double.infinity,
@@ -123,7 +122,7 @@ class _Login extends State<Login> {
                     },
                   ),
 
-                  Padding(padding: EdgeInsets.only(top: 30)),
+                  Padding(padding: EdgeInsets.only(top: 20)),
 
                   MaterialButton(
                     minWidth: double.infinity,
@@ -146,6 +145,17 @@ class _Login extends State<Login> {
                           }
                         }
                       });
+                    },
+                  ),
+
+                  Padding(padding: EdgeInsets.only(top: 20)),
+
+                  MaterialButton(
+                    minWidth: double.infinity,
+                    color: Colors.green,
+                    child: Text('游客进入'),
+                    onPressed: (){
+                      goToRm(context, Home());
                     },
                   ),
 
