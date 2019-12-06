@@ -19,6 +19,12 @@ class Api {
   static const String register = '/user/register';
 
   ///
+  ///退出:https://www.wanandroid.com/user/logout/json
+  ///方法：GET, 参数：无
+  ///
+  static const String logout = '/user/logout/json';
+
+  ///
   ///首页banner:/banner/json
   ///方法：GET, 参数：无
   ///

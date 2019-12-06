@@ -7,6 +7,7 @@ import 'package:enjoy_android/entity/system_sub_entity.dart';
 import 'package:enjoy_android/entity/system_tree_entity.dart';
 
 import 'entity/hot_word_entity.dart';
+import 'entity/logout_entity.dart';
 import 'entity/navigate_entity.dart';
 import 'entity/project_entity.dart';
 import 'entity/project_tab_entity.dart';
@@ -26,7 +27,9 @@ class EntityFactory {
       return LoginEntity.fromJson(json) as T;
     } else if (T.toString() == "RegisterEntity") {
       return RegisterEntity.fromJson(json) as T;
-    } else if (T.toString() == "SystemSubEntity") {
+    } else if (T.toString() == "LogoutEntity") {
+      return LogoutEntity.fromJson(json) as T;
+    }else if (T.toString() == "SystemSubEntity") {
       return SystemSubEntity.fromJson(json) as T;
     } else if (T.toString() == "SystemTreeEntity") {
       return SystemTreeEntity.fromJson(json) as T;

@@ -74,6 +74,14 @@ class ApiService{
   }
 
   ///
+  ///退出
+  ///
+  static Future<Map> logout()async{
+    var req = {};
+    return base(Api.logout, req);
+  }
+
+  ///
   ///首页banner
   ///
   static Future<Map> banner()async{

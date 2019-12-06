@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:enjoy_android/global/api_service.dart';
 import 'package:enjoy_android/widget/sub/register.dart';
 import 'package:flutter/material.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:enjoy_android/util/http_util.dart';
 import 'package:enjoy_android/global/api.dart';
 import 'package:enjoy_android/entity/login_entity.dart';
@@ -31,9 +30,9 @@ class _Login extends State<Login> {
     String username = controller1.text;
     String password = controller2.text;
     if(username.isEmpty){
-      BotToast.showText(text: '账号不能为空');
+      myToast('账号不能为空');
     }else if(password.isEmpty){
-      BotToast.showText(text: '密码不能为空');
+      myToast('密码不能为空');
     }else{
 
       ApiService.login(username, password).then<Response>((response){
@@ -58,7 +57,7 @@ class _Login extends State<Login> {
           goToRm(context, Home());
         }else{//登录失败
           print('登录失败：'+loginEntity.errorMsg);
-          BotToast.showText(text: loginEntity.errorMsg);
+          myToast(loginEntity.errorMsg);
           SPKey.spSetBool(SPKey.IS_LOGIN, false);
         }
         return;
@@ -143,7 +142,7 @@ class _Login extends State<Login> {
                           if (txt2.isNotEmpty) {
                             controller2.text = txt2;
                             _doLogin();
-                            BotToast.showText(text: '正在登录...');
+                            myToast( '正在登录...');
                           }
                         }
                       });

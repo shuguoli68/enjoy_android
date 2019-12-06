@@ -27,18 +27,21 @@ class _SystemPageState extends State<SystemPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ZekingRefresh(
-      controller: _refreshController,
-      onRefresh: onRefresh,
-      onLoading: onLoading,
-      canLoadMore: false,
-      child: ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        padding: EdgeInsets.all(2),
-        itemBuilder: (BuildContext context, int index) {
-          return _systemTreeWidget(index);
-        },
-        itemCount: datas.length,
+    return Scaffold(
+      backgroundColor: Color(baseBg),
+      body: ZekingRefresh(
+        controller: _refreshController,
+        onRefresh: onRefresh,
+        onLoading: onLoading,
+        canLoadMore: false,
+        child: ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.all(2),
+          itemBuilder: (BuildContext context, int index) {
+            return _systemTreeWidget(index);
+          },
+          itemCount: datas.length,
+        ),
       ),
     );
   }
@@ -99,7 +102,8 @@ class _SystemPageState extends State<SystemPage> {
       child: Padding(padding: EdgeInsets.all(5),child: Container(
         padding: EdgeInsets.all(5.0),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.black12, width: 2),
+          color: Colors.white,
+//          border: Border.all(color: Colors.black12, width: 2),
           borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         ),
         child: Center(

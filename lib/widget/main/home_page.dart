@@ -35,24 +35,27 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return ZekingRefresh(
-      controller: _refreshController,
-      onRefresh: onRefresh,
-      onLoading: onLoading,
-      child: ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        padding: EdgeInsets.all(2),
-        itemBuilder: (BuildContext context, int index) {
-          if(index == 0){
-            return Column(children: <Widget>[
-              _bannerWidget(),
-              _articleWidget(index),
-            ],);
-          }else {
-            return _articleWidget(index);
-          }
-        },
-        itemCount: datas.length,
+    return Scaffold(
+      backgroundColor: Color(baseBg),
+      body: ZekingRefresh(
+        controller: _refreshController,
+        onRefresh: onRefresh,
+        onLoading: onLoading,
+        child: ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.all(2),
+          itemBuilder: (BuildContext context, int index) {
+            if(index == 0){
+              return Column(children: <Widget>[
+                _bannerWidget(),
+                _articleWidget(index),
+              ],);
+            }else {
+              return _articleWidget(index);
+            }
+          },
+          itemCount: datas.length,
+        ),
       ),
     );
   }
@@ -159,7 +162,8 @@ class _HomePageState extends State<HomePage> {
       child: Padding(padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),child: Container(
         padding: EdgeInsets.all(5.0),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.black12, width: 2),
+          color: Colors.white,
+//          border: Border.all(color: Colors.black12, width: 2),
           borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         ),
         child: Column(

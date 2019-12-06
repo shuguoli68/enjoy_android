@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:enjoy_android/global/api_service.dart';
+import 'package:enjoy_android/global/sp_key.dart';
 import 'package:enjoy_android/widget/main/home_page.dart';
 import 'package:enjoy_android/widget/main/project_page.dart';
 import 'package:enjoy_android/widget/main/search_page.dart';
@@ -42,7 +43,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-//    User().refreshUserData();
     return Scaffold(
       drawer: Drawer(child: HomeDrawer(context).homeDrawer(),),
       appBar: AppBar(

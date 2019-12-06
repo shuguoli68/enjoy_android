@@ -33,7 +33,7 @@ class _SearchHotState extends State<SearchHot> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      backgroundColor: Color(0xFFECECEC),
+      backgroundColor: Color(baseBg),
       appBar: AppBar(
         title: Text('搜索'),
       ),

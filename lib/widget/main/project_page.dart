@@ -170,15 +170,19 @@ class _ProjectPageState extends State<ProjectPage> with SingleTickerProviderStat
         child: Column(
           children: <Widget>[
             Flex(direction: Axis.horizontal,children: <Widget>[
-              ClipOval(
-                child: Image.asset('images/default.png',width: 50,height: 50,fit: BoxFit.fitHeight,),
+              Container(width: 80, height: 150,
+                decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    image: DecorationImage(image: NetworkImage(item.envelopePic),fit: BoxFit.cover)
+                ),
               ),
-              Expanded(flex:1, child: Padding(padding: EdgeInsets.only(left: 5),child: Text(item.title, style: TextStyle(fontSize: 16),maxLines: 3,),),)
+              Expanded(flex:1, child: Padding(padding: EdgeInsets.only(left: 5),child: Text('简介：${item.desc}', style: TextStyle(fontSize: 16),maxLines: 3,),),)
             ],),
             Padding(padding: EdgeInsets.all(3)),
             Flex(direction: Axis.horizontal,children: <Widget>[
-              Expanded(flex:1, child: Text(item.chapterName,style: TextStyle(color: Colors.black54),)),
-              Expanded(flex:1, child: Text(item.niceShareDate,style: TextStyle(color: Colors.black54),)),
+              Expanded(flex:1, child: Text('作者：${item.author}',style: TextStyle(color: Colors.black54),)),
+              Expanded(flex:1, child: Text('分享于：${item.niceShareDate}',style: TextStyle(color: Colors.black54),)),
             ],)
           ],
         ),

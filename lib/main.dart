@@ -73,7 +73,7 @@ class _SplashState extends State<Splash> {
   @override
   void initState(){
     super.initState();
-    timer = Timer(const Duration(milliseconds: 1500),(){
+    timer = Timer(const Duration(milliseconds: 100),(){
       Future isLogin = SPKey.spGetBool(SPKey.IS_LOGIN);
       isLogin.then((onValue){
         if(onValue){

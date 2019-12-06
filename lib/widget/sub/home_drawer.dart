@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:enjoy_android/global/sp_key.dart';
 import 'package:enjoy_android/global/theme_colors.dart';
@@ -5,20 +7,32 @@ import 'package:enjoy_android/global/theme_provide.dart';
 import 'package:enjoy_android/global/common.dart';
 import 'package:flutter/material.dart';
 import 'package:provide/provide.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 class HomeDrawer {
 
   BuildContext context;
+  static String name = '游客';
 
   HomeDrawer(@required this.context);
 
   Widget _drawerHerder(){
+    SPKey.spGetStr(SPKey.USER_NAME).then((value){
+      if(value.isNotEmpty){
+        name = value;
+      }
+    });
     return UserAccountsDrawerHeader(
-      accountName: Text('YourName'),
-      accountEmail: Text('youremail@163.com'),
+      accountName: Text(name),
+      accountEmail: Text(name+'-email@163.com'),
       currentAccountPicture: CircleAvatar(
         backgroundImage: AssetImage('images/user_ba.png'),
+        child: GestureDetector(
+          onTap: (){
+
+          },
+//          child: Padding(padding: EdgeInsets.all(5),child: Text('未登录'),),
+        ),
       ),
       onDetailsPressed: (){
         BotToast.showText(text:'点击了');
@@ -116,6 +130,21 @@ class HomeDrawer {
             onTap: (){
               print('切换主题');
               showThemeDialog();
+            },
+          ),
+        ),
+
+        Container(
+          decoration: BoxDecoration(
+            border: Border(
+                bottom: Divider.createBorderSide(context,color: Colors.green,width: 1)
+            ),
+          ),
+          child: ListTile(
+            leading: CircleAvatar(child: Text('OFF'),),
+            title: Text('退出登录'),
+            onTap: (){
+              logout(context);
             },
           ),
         ),
