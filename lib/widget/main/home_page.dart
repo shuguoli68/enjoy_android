@@ -197,6 +197,9 @@ class _HomePageState extends State<HomePage> {
       ApiService.uncollect(item.id).then((json){
         LogoutEntity entity = EntityFactory.generateOBJ(json.data);
         if(entity.errorCode == 0){//成功
+          setState(() {
+            item.collect = !item.collect;
+          });
           myToast('已取消收藏');
         }else{//失败
           myToast(entity.errorMsg);
@@ -206,14 +209,14 @@ class _HomePageState extends State<HomePage> {
       ApiService.collect(item.id).then((json){
         LogoutEntity entity = EntityFactory.generateOBJ(json.data);
         if(entity.errorCode == 0){//成功
+          setState(() {
+            item.collect = !item.collect;
+          });
           myToast('已收藏');
         }else{//失败
           myToast(entity.errorMsg);
         }
       });
     }
-    setState(() {
-      item.collect = !item.collect;
-    });
   }
 }
