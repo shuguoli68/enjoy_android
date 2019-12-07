@@ -109,10 +109,11 @@ class _SearchHotState extends State<SearchHot> {
 
   _resultWidget(){
     if(datas.isEmpty){
-      return Column(children: <Widget>[
+      return SingleChildScrollView(child:
+      Column(children: <Widget>[
         Row(children: <Widget>[ Expanded(child: Padding(padding: EdgeInsets.only(left: 10,top: 30,bottom: 10),child: Text('热门搜索：',textAlign: TextAlign.left,),),) ],),
         Wrap(spacing: 5, runSpacing: 5, children: _hotWidget(),)
-      ],);
+      ],),);
     }else{
       return ZekingRefresh(
         controller: _refreshController,
