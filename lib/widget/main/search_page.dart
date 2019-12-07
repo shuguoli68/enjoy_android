@@ -104,6 +104,12 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _refreshController.dispose();
+  }
+
 
   List<Widget> childChilden(int index) => List.generate(data[index].articles.length, (subIndex) {
     return GestureDetector(

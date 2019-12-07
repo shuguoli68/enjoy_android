@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:enjoy_android/global/common.dart';
+import 'package:enjoy_android/global/my_config.dart';
 import 'package:enjoy_android/widget/main/home.dart';
 import 'package:enjoy_android/widget/sub/login.dart';
 import 'package:flutter/material.dart';
@@ -73,16 +74,8 @@ class _SplashState extends State<Splash> {
   @override
   void initState(){
     super.initState();
-    timer = Timer(const Duration(milliseconds: 100),(){
-      Future isLogin = SPKey.spGetBool(SPKey.IS_LOGIN);
-      isLogin.then((onValue){
-        if(onValue){
-          goToRm(context, Home());
-        }else{
-          goToRm(context, Login());
-//          goToRm(context, Home());
-        }
-      });
+    timer = Timer(const Duration(milliseconds: 10),(){
+      _initData();
     });
   }
 
@@ -98,6 +91,31 @@ class _SplashState extends State<Splash> {
         ),
       ),
     );
+  }
+
+  _initData(){
+    Future.wait([
+      SPKey.spGetStr(SPKey.COOKIE).then((onValue){
+        MyConfig.cookie = onValue;
+      }),
+      SPKey.spGetStr(SPKey.USER_NAME).then((value){
+        if(value.isNotEmpty){
+          MyConfig.userName = value;
+        }
+      }),
+      SPKey.spGetBool(SPKey.IS_LOGIN).then((onValue){
+        MyConfig.isLogin = onValue;
+      })
+    ]).then((value){
+      print('结果：$value');
+    }).whenComplete((){
+      if(MyConfig.isLogin){
+        goToRm(context, Home());
+      }else{
+        goToRm(context, Login());
+//          goToRm(context, Home());
+      }
+    });
   }
 
   @override

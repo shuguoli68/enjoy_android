@@ -5,6 +5,7 @@ import 'package:enjoy_android/global/my_public.dart';
 
 import '../entity_factory.dart';
 import 'api_service.dart';
+import 'my_config.dart';
 
 const int baseBg = 0xFFECECEC;
 
@@ -46,6 +47,9 @@ logout(BuildContext context){
       SPKey.spSetStr(SPKey.PASS_WORD, '');
       SPKey.spSetStr(SPKey.COOKIE, '');
       SPKey.spSetBool(SPKey.IS_LOGIN, false);
+      MyConfig.userName = '';
+      MyConfig.isLogin = false;
+      MyConfig.cookie = '';
       goToRm(context, Login());
     }else{
       myToast(entity.errorMsg);

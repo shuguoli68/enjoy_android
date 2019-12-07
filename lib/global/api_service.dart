@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:enjoy_android/entity/register_entity.dart';
+import 'package:enjoy_android/global/my_config.dart';
 import 'package:enjoy_android/global/sp_key.dart';
 import 'package:enjoy_android/util/http_util.dart';
 
@@ -12,12 +13,11 @@ import 'api.dart';
 class ApiService{
 
   static Map<String, String> _headerMap;
+
   static Map<String, String> _getHeader() {
     if (null == _headerMap) {
       _headerMap = Map();
-      SPKey.spGetStr(SPKey.COOKIE).then((onValue){
-        _headerMap["Cookie"] = onValue;
-      });
+      _headerMap["Cookie"] = MyConfig.cookie;
     }
     return _headerMap;
   }

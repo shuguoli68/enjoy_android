@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:enjoy_android/global/api_service.dart';
+import 'package:enjoy_android/global/my_config.dart';
 import 'package:enjoy_android/widget/sub/register.dart';
 import 'package:flutter/material.dart';
 import 'package:enjoy_android/util/http_util.dart';
@@ -34,7 +35,6 @@ class _Login extends State<Login> {
     }else if(password.isEmpty){
       myToast('密码不能为空');
     }else{
-
       ApiService.login(username, password).then<Response>((response){
         LoginEntity loginEntity = EntityFactory.generateOBJ(response.data);
         if(loginEntity.errorCode == 0){//登录成功
@@ -54,6 +54,9 @@ class _Login extends State<Login> {
           SPKey.spSetStr(SPKey.PASS_WORD, password);
           SPKey.spSetStr(SPKey.COOKIE, cookie);
           SPKey.spSetBool(SPKey.IS_LOGIN, true);
+          MyConfig.userName = username;
+          MyConfig.isLogin = true;
+          MyConfig.cookie = cookie;
           goToRm(context, Home());
         }else{//登录失败
           print('登录失败：'+loginEntity.errorMsg);

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:enjoy_android/global/my_config.dart';
 import 'package:enjoy_android/global/sp_key.dart';
 import 'package:enjoy_android/global/theme_colors.dart';
 import 'package:enjoy_android/global/theme_provide.dart';
@@ -20,11 +21,7 @@ class HomeDrawer {
   HomeDrawer(@required this.context);
 
   Widget _drawerHerder(){
-    SPKey.spGetStr(SPKey.USER_NAME).then((value){
-      if(value.isNotEmpty){
-        name = value;
-      }
-    });
+    if(MyConfig.userName.isNotEmpty) name = MyConfig.userName;
     return UserAccountsDrawerHeader(
       accountName: Text(name),
       accountEmail: Text(name+'-email@163.com'),
