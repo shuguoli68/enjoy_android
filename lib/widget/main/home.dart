@@ -49,8 +49,8 @@ class _HomeState extends State<Home> {
         title: Text('玩Android'),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.search), onPressed: () { goTo(context, SearchHot()); }),
-          IconButton(icon: Icon(Icons.add), onPressed: () {  }),
-          IconButton(icon: Icon(Icons.local_phone),onPressed: (){ goToRm(context, Login()); },)
+//          IconButton(icon: Icon(Icons.add), onPressed: () {  }),
+//          IconButton(icon: Icon(Icons.local_phone),onPressed: (){ goToRm(context, Login()); },)
         ],
       ),
       body: PageView(

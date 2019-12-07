@@ -11,12 +11,13 @@ import 'package:flutter/material.dart';
 import 'package:provide/provide.dart';
 
 import 'collect_list.dart';
+import 'login.dart';
 
 
 class HomeDrawer {
 
   BuildContext context;
-  static String name = '游客';
+  static String name = '点击头像登录';
 
   HomeDrawer(@required this.context);
 
@@ -29,9 +30,11 @@ class HomeDrawer {
         backgroundImage: AssetImage('images/user_ba.png'),
         child: GestureDetector(
           onTap: (){
-
+            if(MyConfig.userName.isEmpty){
+              goToRm(context, Login());
+            }
           },
-//          child: Padding(padding: EdgeInsets.all(5),child: Text('未登录'),),
+          child: Padding(padding: EdgeInsets.all(5),child: Text(MyConfig.userName.isNotEmpty?'':'未登录', style: TextStyle(color: Colors.red),),),
         ),
       ),
       onDetailsPressed: (){
