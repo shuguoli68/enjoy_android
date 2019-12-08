@@ -7,6 +7,9 @@ import 'package:enjoy_android/entity/home_banner_entity.dart';
 import 'package:enjoy_android/entity/logout_entity.dart';
 import 'package:enjoy_android/global/api_service.dart';
 import 'package:enjoy_android/global/common.dart';
+import 'package:enjoy_android/global/my_config.dart';
+import 'package:enjoy_android/util/db/article_bean.dart';
+import 'package:enjoy_android/util/db/article_provider.dart';
 import 'package:enjoy_android/widget/web_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:zeking_refresh/zeking_refresh.dart';
@@ -178,7 +181,7 @@ class _HomePageState extends State<HomePage> {
               ),
               Expanded(flex:1, child: Padding(padding: EdgeInsets.only(left: 5),child: Text(item.title, style: TextStyle(fontSize: 16),maxLines: 3,),),),
               IconButton(icon: Icon(item.collect?Icons.favorite:Icons.favorite_border,color: Colors.red,), onPressed: (){
-                _collect(item);
+                MyConfig.isLogin?_collect(item):_saveDB(item);
               })
             ],),
             Padding(padding: EdgeInsets.all(3)),
@@ -217,6 +220,14 @@ class _HomePageState extends State<HomePage> {
           myToast(entity.errorMsg);
         }
       });
+    }
+  }
+
+  _saveDB(HomeArticleDataData item){
+    if(!item.collect){
+      ArticleBean model = new ArticleBean(id: item.id, title: item.title, upTime: item.niceShareDate, author: item.author, link: item.link);
+      saveArticle(model);
+      myToast('已保存至本地收藏');
     }
   }
 }

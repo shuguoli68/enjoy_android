@@ -1,4 +1,6 @@
 import 'package:enjoy_android/entity/logout_entity.dart';
+import 'package:enjoy_android/util/db/article_bean.dart';
+import 'package:enjoy_android/util/db/article_provider.dart';
 import 'package:enjoy_android/widget/sub/login.dart';
 import 'package:flutter/material.dart';
 import 'package:enjoy_android/global/my_public.dart';
@@ -56,3 +58,10 @@ logout(BuildContext context){
     }
   });
 }
+
+ArticleProvider _provider;
+saveArticle(ArticleBean model) async{
+  if(_provider == null) _provider = new ArticleProvider();
+  _provider.insert(model);
+}
+
