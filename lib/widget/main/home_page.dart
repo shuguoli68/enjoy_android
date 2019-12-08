@@ -182,7 +182,7 @@ class _HomePageState extends State<HomePage> {
               Expanded(flex:1, child: Padding(padding: EdgeInsets.only(left: 5),child: Text(item.title, style: TextStyle(fontSize: 16),maxLines: 3,),),),
               IconButton(icon: Icon(item.collect?Icons.favorite:Icons.favorite_border,color: Colors.red,), onPressed: (){
                 MyConfig.isLogin?_collect(item):_saveDB(item);
-              })
+              }),
             ],),
             Padding(padding: EdgeInsets.all(3)),
             Flex(direction: Axis.horizontal,children: <Widget>[

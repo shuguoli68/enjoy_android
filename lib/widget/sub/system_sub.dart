@@ -1,8 +1,11 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:enjoy_android/entity/logout_entity.dart';
 import 'package:enjoy_android/entity/system_sub_entity.dart';
 import 'package:enjoy_android/entity/system_tree_entity.dart';
 import 'package:enjoy_android/global/api_service.dart';
 import 'package:enjoy_android/global/common.dart';
+import 'package:enjoy_android/global/my_config.dart';
+import 'package:enjoy_android/util/db/article_bean.dart';
 import 'package:flutter/material.dart';
 import 'package:zeking_refresh/zeking_refresh.dart';
 
@@ -165,7 +168,10 @@ class _SystemSubState extends State<SystemSub> with SingleTickerProviderStateMix
               ClipOval(
                 child: Image.asset('images/default.png',width: 50,height: 50,fit: BoxFit.fitHeight,),
               ),
-              Expanded(flex:1, child: Padding(padding: EdgeInsets.only(left: 5),child: Text(item.title, style: TextStyle(fontSize: 16),maxLines: 3,),),)
+              Expanded(flex:1, child: Padding(padding: EdgeInsets.only(left: 5),child: Text(item.title, style: TextStyle(fontSize: 16),maxLines: 3,),),),
+              IconButton(icon: Icon(item.collect?Icons.favorite:Icons.favorite_border,color: Colors.red,), onPressed: (){
+                MyConfig.isLogin?_collect(item):_saveDB(item);
+              }),
             ],),
             Padding(padding: EdgeInsets.all(3)),
             Flex(direction: Axis.horizontal,children: <Widget>[
@@ -176,6 +182,45 @@ class _SystemSubState extends State<SystemSub> with SingleTickerProviderStateMix
         ),
       ),),
     );
+  }
+
+  _collect(SystemSubDataData item){
+    if(item.collect){//取消收藏
+      ApiService.uncollect(item.id).then((json){
+        LogoutEntity entity = EntityFactory.generateOBJ(json.data);
+        if(entity.errorCode == 0){//成功
+          setState(() {
+            item.collect = !item.collect;
+          });
+          myToast('已取消收藏');
+        }else{//失败
+          myToast(entity.errorMsg);
+        }
+      });
+    }else{//收藏
+      ApiService.collect(item.id).then((json){
+        LogoutEntity entity = EntityFactory.generateOBJ(json.data);
+        if(entity.errorCode == 0){//成功
+          setState(() {
+            item.collect = !item.collect;
+          });
+          myToast('已收藏');
+        }else{//失败
+          myToast(entity.errorMsg);
+        }
+      });
+    }
+  }
+
+  _saveDB(SystemSubDataData item){
+    if(!item.collect){
+      ArticleBean model = new ArticleBean(id: item.id, title: item.title, upTime: item.niceShareDate, author: item.author.isEmpty?'未知':item.author, link: item.link);
+      saveArticle(model);
+      setState(() {
+        item.collect = true;
+      });
+      myToast('已保存至本地收藏');
+    }
   }
 
   @override
