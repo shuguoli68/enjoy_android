@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:provide/provide.dart';
 
 import 'collect_list.dart';
+import 'collect_local.dart';
 import 'login.dart';
 
 
@@ -100,6 +101,21 @@ class HomeDrawer {
             title: Text('收藏列表'),
             onTap: (){
               goTo(context, CollectList());
+            },
+          ),
+        ),
+
+        Container(
+          decoration: BoxDecoration(
+            border: Border(
+                bottom: Divider.createBorderSide(context,color: Colors.green,width: 1)
+            ),
+          ),
+          child: ListTile(
+            leading: CircleAvatar(child: Text('本'),),
+            title: Text('本地收藏'),
+            onTap: (){
+              goTo(context, CollectLocal());
             },
           ),
         ),

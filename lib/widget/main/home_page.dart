@@ -225,8 +225,11 @@ class _HomePageState extends State<HomePage> {
 
   _saveDB(HomeArticleDataData item){
     if(!item.collect){
-      ArticleBean model = new ArticleBean(id: item.id, title: item.title, upTime: item.niceShareDate, author: item.author, link: item.link);
+      ArticleBean model = new ArticleBean(id: item.id, title: item.title, upTime: item.niceShareDate, author: item.author.isEmpty?'未知':item.author, link: item.link);
       saveArticle(model);
+      setState(() {
+        item.collect = true;
+      });
       myToast('已保存至本地收藏');
     }
   }

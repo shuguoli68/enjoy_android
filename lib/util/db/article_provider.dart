@@ -1,6 +1,4 @@
 
-import 'dart:html';
-
 import 'package:enjoy_android/util/db/article_bean.dart';
 import 'package:enjoy_android/util/db/base_db_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -27,7 +25,7 @@ class ArticleProvider extends BaseDbProvider{
   createTableString() {
     return '''
         create table $name (
-        $columnId integer primary key,$title text not null,$upTime text not null,$author text not null,$link text not null,)
+        $columnId integer primary key,$title text not null,$upTime text not null,$author text not null,$link text not null)
       ''';
   }
 
@@ -68,7 +66,7 @@ class ArticleProvider extends BaseDbProvider{
   }
 
   ///获取存储的列表
-  Future<List<ArticleBean>> getArticleList(int id) async {
+  Future<List<ArticleBean>> getArticleList() async {
     Database db = await getDataBase();
     List<Map<String, dynamic>> maps = await db.rawQuery("select * from $name");
     List<ArticleBean> list = new List();

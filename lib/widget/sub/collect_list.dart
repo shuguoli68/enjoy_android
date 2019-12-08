@@ -47,6 +47,12 @@ class _CollectListState extends State<CollectList> {
     );
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _refreshController.dispose();
+  }
+
   onRefresh() {
     page = 0;
     datas.clear();
