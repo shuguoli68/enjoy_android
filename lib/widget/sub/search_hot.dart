@@ -159,7 +159,7 @@ class _SearchHotState extends State<SearchHot> {
     return List.generate(hotData.length, (subIndex) {
       return GestureDetector(
         onTap: (){
-          goTo(context, WebWidget(url: hotData[subIndex].link, title: hotData[subIndex].name,));
+          _reqData(hotData[subIndex].name);
         },
         child: Chip(
           label: Text(hotData[subIndex].name),

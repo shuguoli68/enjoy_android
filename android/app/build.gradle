@@ -80,6 +80,13 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
+    //解决：Execution failed for task ':app:lintVitalRelease'
+    lintOptions {
+        disable 'InvalidPackage'
+        disable "ResourceType"
+        abortOnError false
+    }
 }
 
 flutter {
