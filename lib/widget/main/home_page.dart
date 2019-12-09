@@ -161,10 +161,7 @@ class _HomePageState extends State<HomePage> {
     HomeArticleDataData item = datas[index];
     return GestureDetector(
       onTap: (){
-//        goTo(context, WebWidget(url: item.link,title: item.chapterName,));
-      ApiService.collectList(0).then((value){
-
-      });
+        goTo(context, WebWidget(url: item.link,title: item.chapterName,));
       },
       child: Padding(padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),child: Container(
         padding: EdgeInsets.all(5.0),
