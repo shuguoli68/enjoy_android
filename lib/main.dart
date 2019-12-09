@@ -74,7 +74,7 @@ class _SplashState extends State<Splash> {
   @override
   void initState(){
     super.initState();
-    timer = Timer(const Duration(milliseconds: 10),(){
+    timer = Timer(const Duration(milliseconds: 100),(){
       _initData();
     });
   }
@@ -82,14 +82,7 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-//      appBar: AppBar(
-//        title: Text('Splash'),
-//      ),
-      body: Scaffold(
-        body: Center(
-          child: Image.asset('images/splash.png',fit: BoxFit.fill,),
-        ),
-      ),
+      body: Image.asset('images/splash.png',width: double.infinity, height: double.infinity,fit: BoxFit.fill,),
     );
   }
 
