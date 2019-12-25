@@ -22,13 +22,17 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
 
   ZekingRefreshController _refreshController;
   List<HomeBannerData> bannerData = new List();
   List<HomeArticleDataData> datas = new List();
   bool hasMoreData = true;
   int page = 0;
+
+  // TODO: implement wantKeepAlive
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {

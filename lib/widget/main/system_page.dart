@@ -13,10 +13,13 @@ class SystemPage extends StatefulWidget {
   State<SystemPage> createState() => _SystemPageState();
 }
 
-class _SystemPageState extends State<SystemPage> {
+class _SystemPageState extends State<SystemPage> with AutomaticKeepAliveClientMixin{
 
   List<SystemTreeData> datas = new List();
   ZekingRefreshController _refreshController;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
